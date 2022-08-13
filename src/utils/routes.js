@@ -1,0 +1,6 @@
+export const REGIN_ROUTE = "/regin"
+export const LOGIN_ROUTE = "/login"
+export const MAIN_ROUTE = "/"
+export const USER_ROUTE = "/user"
+export const ADMIN_ROUTE = "/admin"
+export const COLLECTION_ROUTE = "/collection"
