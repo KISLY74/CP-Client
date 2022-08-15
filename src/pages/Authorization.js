@@ -1,7 +1,8 @@
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Container, Card, Form, Button, Row } from "react-bootstrap"
-import { login, regin } from "../http/userApi"
+import { login, regin, getOneUser } from "../http/userApi"
+import { ADMIN_ROUTE, USER_ROUTE } from "../utils/routes";
 
 const Authorization = () => {
   const location = useLocation()
@@ -9,15 +10,18 @@ const Authorization = () => {
   const [username, setUserName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const history = useNavigate()
   const handleClickReginLogin = async () => {
-    let res
     try {
       if (isLogin) {
-        res = await login(email, password).then(() => {
+        await login(email, password).then(async () => {
+          await getOneUser(email).then((data) => {
+            data.data.roles.includes("ADMIN") ? history(ADMIN_ROUTE) : history(USER_ROUTE)
+          })
           alert("Успешно авторизован")
         }).catch((e) => alert(e.response.data.message))
       } else {
-        res = await regin(email, password, username).then(() => {
+        await regin(email, password, username).then(() => {
           alert("Успешно зарегистрирован")
         }).catch((e) => alert(e.response.data.message))
       }
