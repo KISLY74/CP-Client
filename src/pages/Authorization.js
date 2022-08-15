@@ -1,13 +1,30 @@
 import { NavLink, useLocation } from "react-router-dom";
 import { useState } from "react";
 import { Container, Card, Form, Button, Row } from "react-bootstrap"
+import { login, regin } from "../http/userApi"
 
 const Authorization = () => {
   const location = useLocation()
   const isLogin = location.pathname === "/login"
-  const [name, setName] = useState('')
+  const [username, setUserName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const handleClickReginLogin = async () => {
+    let res
+    try {
+      if (isLogin) {
+        res = await login(email, password).then(() => {
+          alert("Успешно авторизован")
+        }).catch((e) => alert(e.response.data.message))
+      } else {
+        res = await regin(email, password, username).then(() => {
+          alert("Успешно зарегистрирован")
+        }).catch((e) => alert(e.response.data.message))
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }
   return (
     <Container
       className="d-flex justify-content-center align-items-center"
@@ -19,8 +36,8 @@ const Authorization = () => {
           {!isLogin ? <Form.Control
             className="mt-3"
             placeholder="Имя пользователя"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            value={username}
+            onChange={(e) => setUserName(e.target.value)}
           /> : ""}
           <Form.Control
             className="mt-3"
@@ -41,11 +58,11 @@ const Authorization = () => {
             </div> : <div>Есть аккаунт?
               <NavLink style={{ textDecoration: "none" }} to="/login"> Войдите!</NavLink>
             </div>}
-            <Button className="mt-3" variant={"outline-success"}>{isLogin ? "Войти" : "Зарегистрироваться"}</Button>
+            <Button className="mt-3" variant={"outline-success"} onClick={() => handleClickReginLogin()}>{isLogin ? "Войти" : "Зарегистрироваться"}</Button>
           </Row>
         </Form>
       </Card>
-    </Container>
+    </Container >
   );
 }
 
