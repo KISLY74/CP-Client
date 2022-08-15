@@ -22,3 +22,7 @@ export const check = async () => {
   localStorage.setItem('token', data.token)
   return data
 }
+export const getOneUser = async (email) => {
+  const data = await axios.post(`${API_URL}/api/user/get`, { email })
+  return data
+}
