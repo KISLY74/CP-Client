@@ -13,7 +13,7 @@ export const regin = async (email, password, username) => {
   return data
 }
 export const login = async (email, password) => {
-  const data = await axios.post(`${API_URL}/api/user/login`, config, { email, password })
+  const data = await axios.post(`${API_URL}/api/user/login`, { email, password })
   localStorage.setItem('token', data.token)
   return data
 }
