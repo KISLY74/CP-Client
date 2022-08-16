@@ -1,10 +1,13 @@
-import { Table, Form } from "react-bootstrap"
-import { useEffect, useState } from "react"
-import { getUsers } from "../http/userApi"
+import { Table, Form, ButtonGroup, Button } from "react-bootstrap"
+import { useContext, useEffect, useState } from "react"
+import { getUsers, changeStatus, getOneUser } from "../http/userApi"
 import { LOGIN_ROUTE } from "../utils/routes"
 import { useNavigate } from "react-router-dom"
+import { observer } from "mobx-react-lite"
+import { Context } from "../index"
 
-const Admin = () => {
+const Admin = observer(() => {
+  const { user } = useContext(Context)
   const history = useNavigate()
   const [users, setUsers] = useState([])
   const [usersValues, setUsersValues] = useState([])
@@ -40,9 +43,36 @@ const Admin = () => {
       document.querySelector(".checkbox-all").firstChild.checked = false
     }
   }
+  const checkStatus = async () => {
+    await getOneUser(user.email).then((data) => {
+      if (data.status === "Block") {
+        user.setIsAuth(false)
+        user.setIsBlock(true)
+      } else {
+        user.setIsAuth(true)
+      }
+    })
+  }
+  const handleClickChangeStatus = (event) => {
+    checkStatus().then(() => {
+      checkboxes.map(async (e, i) => {
+        if (checkboxes[i].checked) {
+          await changeStatus(users[i].email, event.target.textContent)
+          checkboxes[i].checked = false
+          document.querySelector(".checkbox-all").firstChild.checked = false
+          updateTableUsers()
+          checkStatus()
+        }
+      })
+    })
+  }
   return (
     <div className="p-4">
       <h1>Пользователи</h1>
+      <ButtonGroup className="mb-1 mt-3" aria-label="Basic example" onClick={(e) => handleClickChangeStatus(e)}>
+        <Button variant="success">Unblock</Button>
+        <Button variant="warning">Block</Button>
+      </ButtonGroup>
       <Table bordered hover>
         <thead>
           <tr>
@@ -58,6 +88,6 @@ const Admin = () => {
       </Table>
     </div>
   )
-}
+})
 
 export default Admin
