@@ -18,12 +18,19 @@ const Authorization = observer(() => {
     try {
       if (isLogin) {
         await login(email, password).then(async () => {
-          await getOneUser(email).then((data) => {
-            data.data.roles.includes("ADMIN") ? history(ADMIN_ROUTE) : history(USER_ROUTE)
+          await getOneUser(email).then((res) => {
+            if (res.data.status === "Block") {
+              user.setIsAuth(false)
+              user.setIsBlock(true)
+              alert("Вы заблокированы")
+            } else {
+              user.setIsAuth(true)
+              alert("Успешно авторизован")
+              localStorage.setItem("username", res.data.username)
+              res.data.roles.includes("ADMIN") ? history(ADMIN_ROUTE) : history(USER_ROUTE)
+            }
           })
-          user.setIsAuth(true)
-          alert("Успешно авторизован")
-        }).catch((e) => alert(e.response.data.message))
+        })
       } else {
         await regin(email, password, username).then(() => {
           alert("Успешно зарегистрирован")
