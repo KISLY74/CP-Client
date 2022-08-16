@@ -1,10 +1,13 @@
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Container, Card, Form, Button, Row } from "react-bootstrap"
 import { login, regin, getOneUser } from "../http/userApi"
 import { ADMIN_ROUTE, USER_ROUTE } from "../utils/routes";
+import { observer } from "mobx-react-lite";
+import { Context } from "../index";
 
-const Authorization = () => {
+const Authorization = observer(() => {
+  const { user } = useContext(Context)
   const location = useLocation()
   const isLogin = location.pathname === "/login"
   const [username, setUserName] = useState('')
@@ -18,6 +21,7 @@ const Authorization = () => {
           await getOneUser(email).then((data) => {
             data.data.roles.includes("ADMIN") ? history(ADMIN_ROUTE) : history(USER_ROUTE)
           })
+          user.setIsAuth(true)
           alert("Успешно авторизован")
         }).catch((e) => alert(e.response.data.message))
       } else {
@@ -68,6 +72,6 @@ const Authorization = () => {
       </Card>
     </Container >
   );
-}
+})
 
 export default Authorization;
