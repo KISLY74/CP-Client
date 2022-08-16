@@ -25,4 +25,7 @@ export default class UserStore {
   get isBlock() {
     return this._isBlock
   }
+  get email() {
+    return this._user.email
+  }
 }
