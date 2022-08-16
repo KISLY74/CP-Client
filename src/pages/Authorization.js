@@ -24,6 +24,7 @@ const Authorization = observer(() => {
         user.setIsAuth(true)
         alert("Успешно авторизован")
       }
+      user.setUser(res.data)
       localStorage.setItem("username", res.data.username)
       res.data.roles.includes("ADMIN") ? history(ADMIN_ROUTE) : history(USER_ROUTE)
     })
