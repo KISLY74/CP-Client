@@ -17,6 +17,7 @@ const NavBar = observer(() => {
   return (
     <Navbar className="d-flex justify-content-between" style={{ paddingLeft: 15, paddingRight: 15 }
     } bg="dark" variant="dark" >
+      <h4 className="text-white">{user.isAuth ? localStorage.getItem('username') : ""}</h4>
       <Nav style={{ color: 'white' }}>
         <Button variant={"outline-light"} onClick={() => logOut()}>{user.isAuth ? "Выйти" : "Авторизация"}</Button>
       </Nav>
