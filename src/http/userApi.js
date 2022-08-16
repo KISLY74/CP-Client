@@ -30,3 +30,7 @@ export const getUsers = async () => {
   const data = await axios.get(`${API_URL}/api/user/get/all`)
   return data
 }
+export const changeStatus = async (email, status) => {
+  const data = await axios.put(`${API_URL}/api/user/change/status`, { email, status })
+  return data
+}
