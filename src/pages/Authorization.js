@@ -14,27 +14,26 @@ const Authorization = observer(() => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const history = useNavigate()
+  const checkStatusAuth = async () => {
+    await getOneUser(email).then((res) => {
+      if (res.data.status === "Block") {
+        user.setIsAuth(false)
+        user.setIsBlock(true)
+        alert("Вы заблокированы")
+      } else {
+        user.setIsAuth(true)
+        alert("Успешно авторизован")
+      }
+      localStorage.setItem("username", res.data.username)
+      res.data.roles.includes("ADMIN") ? history(ADMIN_ROUTE) : history(USER_ROUTE)
+    })
+  }
   const handleClickReginLogin = async () => {
     try {
       if (isLogin) {
-        await login(email, password).then(async () => {
-          await getOneUser(email).then((res) => {
-            if (res.data.status === "Block") {
-              user.setIsAuth(false)
-              user.setIsBlock(true)
-              alert("Вы заблокированы")
-            } else {
-              user.setIsAuth(true)
-              alert("Успешно авторизован")
-              localStorage.setItem("username", res.data.username)
-              res.data.roles.includes("ADMIN") ? history(ADMIN_ROUTE) : history(USER_ROUTE)
-            }
-          })
-        })
+        await login(email, password).then(() => checkStatusAuth()).catch((e) => alert(e.response.data.message))
       } else {
-        await regin(email, password, username).then(() => {
-          alert("Успешно зарегистрирован")
-        }).catch((e) => alert(e.response.data.message))
+        await regin(email, password, username).then(() => alert("Успешно зарегистрирован")).catch((e) => alert(e.response.data.message))
       }
     } catch (e) {
       console.log(e)
