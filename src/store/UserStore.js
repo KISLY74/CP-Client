@@ -28,4 +28,7 @@ export default class UserStore {
   get email() {
     return this._user.email
   }
+  get roles() {
+    return this._user.roles
+  }
 }
