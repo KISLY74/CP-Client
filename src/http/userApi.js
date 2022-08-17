@@ -34,3 +34,7 @@ export const changeStatus = async (email, status) => {
   const data = await axios.put(`${API_URL}/api/user/change/status`, { email, status })
   return data
 }
+export const deleteUser = async (email) => {
+  const data = await axios.put(`${API_URL}/api/user/delete`, { email })
+  return data
+}
