@@ -1,6 +1,6 @@
 import { Table, Form, ButtonGroup, Button, Spinner } from "react-bootstrap"
 import { useContext, useEffect, useState } from "react"
-import { getUsers, changeStatus, getOneUser } from "../http/userApi"
+import { getUsers, changeStatus, getOneUser, deleteUser } from "../http/userApi"
 import { LOGIN_ROUTE, USER_ROUTE } from "../utils/routes"
 import { useNavigate } from "react-router-dom"
 import { observer } from "mobx-react-lite"
@@ -55,6 +55,9 @@ const Admin = observer(() => {
       }
     })
   }
+  const handleClickDelete = async (email) => {
+    await deleteUser(email).then(() => updateTableUsers())
+  }
   const handleClickChangeStatus = (event) => {
     checkStatus().then(() => {
       checkboxes.map(async (e, i) => {
@@ -64,6 +67,7 @@ const Admin = observer(() => {
           document.querySelector(".checkbox-all").firstChild.checked = false
           updateTableUsers()
           checkStatus()
+          if (event.target.textContent === "Delete") handleClickDelete(users[i].email)
         }
       })
     })
@@ -76,6 +80,7 @@ const Admin = observer(() => {
           <ButtonGroup className="mb-1 mt-3" aria-label="Basic example" onClick={(e) => handleClickChangeStatus(e)}>
             <Button variant="success">Unblock</Button>
             <Button variant="warning">Block</Button>
+            <Button variant="danger">Delete</Button>
             {loading ? false : <Button className="d-flex justify-content-center" variant="dark">
               <Spinner
                 as="span"
