@@ -59,10 +59,11 @@ const Admin = observer(() => {
     await deleteUser(email).then(() => updateTableUsers())
   }
   const handleClickChangeStatus = (event) => {
+    setLoading(false)
     checkStatus().then(() => {
       checkboxes.map(async (e, i) => {
         if (checkboxes[i].checked) {
-          await changeStatus(users[i].email, event.target.textContent)
+          await changeStatus(users[i].email, event.target.textContent).finally(() => setLoading(true))
           checkboxes[i].checked = false
           document.querySelector(".checkbox-all").firstChild.checked = false
           updateTableUsers()
