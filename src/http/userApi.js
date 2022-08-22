@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const API_URL = "http://localhost:1710"
+export const API_URL = "http://localhost:1710"
 const config = {
   headers: {
     'Authorization': `Bearer ${localStorage.getItem('token')}`
