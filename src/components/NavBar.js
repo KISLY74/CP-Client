@@ -18,11 +18,15 @@ const NavBar = observer(() => {
     <Navbar className="d-flex justify-content-between" style={{ paddingLeft: 15, paddingRight: 15 }
     } bg="dark" variant="dark" >
       <h4 className="text-white">{user.isAuth ? localStorage.getItem('username') : ""}</h4>
-      <Nav style={{ color: 'white' }}>
-        <NavLink className="nav-link" to={ADMIN_ROUTE}>Администратор</NavLink>
-        <NavLink className="nav-link" to={USER_ROUTE}>Пользователь</NavLink>
-        <Button variant={"outline-light"} onClick={() => logOut()}>{user.isAuth ? "Выйти" : "Авторизация"}</Button>
-      </Nav>
+      {user.isAuth ?
+        <Nav style={{ color: 'white' }}>
+          <NavLink className="nav-link" to={ADMIN_ROUTE}>Администратор</NavLink>
+          <NavLink className="nav-link" to={USER_ROUTE}>Пользователь</NavLink>
+          <Button variant={"outline-light"} onClick={() => logOut()}>{user.isAuth ? "Выйти" : "Авторизация"}</Button>
+        </Nav> :
+        <Nav style={{ color: 'white' }}>
+          <Button variant={"outline-light"} onClick={() => logOut()}>{user.isAuth ? "Выйти" : "Авторизация"}</Button>
+        </Nav>}
     </Navbar >
   )
 })
