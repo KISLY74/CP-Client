@@ -112,12 +112,12 @@ const Admin = observer(() => {
             <thead>
               <tr>
                 <th><Form.Check className="checkbox-all" onClick={() => handleClickCheckboxAll()} />Выделить/Снять всё</th>
-                {headers ? headers.map((e, i) => (i !== 2 && i !== 0) ? <th>{`${e}`}</th> : "") : ""}
+                {headers ? headers.map((e, i) => (i !== 2 && i !== 0 && i !== 6) ? <th>{`${e}`}</th> : "") : ""}
               </tr>
             </thead>
             <tbody>
               {usersValues ? usersValues.map((el, ind) => el ? <tr key={ind}><td><Form.Check onClick={() => handleClickCheckbox()} className="checkbox" key={ind} /></td>{el.map((e, i) => {
-                if (i !== 2 && i !== 0) return <td key={i}>{`${e}`}</td>
+                if (i !== 2 && i !== 0 && i !== 6) return <td key={i}>{`${e}`}</td>
               })}</tr> : '') : ''}
             </tbody>
           </Table>
