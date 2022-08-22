@@ -1,7 +1,7 @@
 import { Button, Navbar } from "react-bootstrap"
 import Nav from "react-bootstrap/Nav"
-import { useNavigate } from "react-router-dom"
-import { LOGIN_ROUTE } from "../utils/routes"
+import { NavLink, useNavigate } from "react-router-dom"
+import { USER_ROUTE, LOGIN_ROUTE, ADMIN_ROUTE } from "../utils/routes"
 import { useContext } from "react"
 import { Context } from "../index"
 import { observer } from "mobx-react-lite"
@@ -19,6 +19,8 @@ const NavBar = observer(() => {
     } bg="dark" variant="dark" >
       <h4 className="text-white">{user.isAuth ? localStorage.getItem('username') : ""}</h4>
       <Nav style={{ color: 'white' }}>
+        <NavLink className="nav-link" to={ADMIN_ROUTE}>Администратор</NavLink>
+        <NavLink className="nav-link" to={USER_ROUTE}>Пользователь</NavLink>
         <Button variant={"outline-light"} onClick={() => logOut()}>{user.isAuth ? "Выйти" : "Авторизация"}</Button>
       </Nav>
     </Navbar >
