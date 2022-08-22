@@ -1,6 +1,6 @@
 import { Table, Form, ButtonGroup, Button, Spinner } from "react-bootstrap"
 import { useContext, useEffect, useState } from "react"
-import { getUsers, changeStatus, getOneUser, deleteUser } from "../http/userApi"
+import { getUsers, changeStatus, getOneUser, deleteUser, addUserToAdmins, removeUserFromAdmins } from "../http/userApi"
 import { LOGIN_ROUTE, USER_ROUTE } from "../utils/routes"
 import { useNavigate } from "react-router-dom"
 import { observer } from "mobx-react-lite"
@@ -73,6 +73,21 @@ const Admin = observer(() => {
       })
     })
   }
+  const handleClickAddRemove = (event) => {
+    setLoading(false)
+    checkboxes.map(async (e, i) => {
+      if (checkboxes[i].checked) {
+        if (Number(event.target.id) === 1) {
+          await addUserToAdmins(users[i].email).finally(() => setLoading(true))
+        } else {
+          await removeUserFromAdmins(users[i].email).finally(() => setLoading(true))
+        }
+        checkboxes[i].checked = false
+        document.querySelector(".checkbox-all").firstChild.checked = false
+        updateTableUsers()
+      }
+    })
+  }
   return (
     <div>
       {user.isAuth ?
@@ -106,6 +121,10 @@ const Admin = observer(() => {
               })}</tr> : '') : ''}
             </tbody>
           </Table>
+          <ButtonGroup className="d-flex" aria-label="Basic example" onClick={(e) => handleClickAddRemove(e)}>
+            <Button variant="outline-success" id={1}>Add to admins</Button>
+            <Button variant="outline-danger" id={2}>Remove from admins</Button>
+          </ButtonGroup>
         </div>
         : history(LOGIN_ROUTE)}
     </div>
