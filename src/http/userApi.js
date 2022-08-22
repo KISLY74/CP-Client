@@ -38,3 +38,11 @@ export const deleteUser = async (email) => {
   const data = await axios.put(`${API_URL}/api/user/delete`, { email })
   return data
 }
+export const addUserToAdmins = async (email) => {
+  const data = await axios.put(`${API_URL}/api/user/add`, { email })
+  return data
+}
+export const removeUserFromAdmins = async (email) => {
+  const data = await axios.put(`${API_URL}/api/user/remove`, { email })
+  return data
+}
