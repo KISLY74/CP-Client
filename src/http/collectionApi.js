@@ -12,3 +12,6 @@ export const getCollectionsByUser = async (email) => {
   const data = await axios.post(`${API_URL}/api/collection/getAllByUser`, { email })
   return data.data
 }
+export const deleteCollection = async (id) => {
+  await axios.put(`${API_URL}/api/collection/delete`, { id })
+}
