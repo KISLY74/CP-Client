@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react"
 import { Form, Button, Card, ListGroup, Spinner } from "react-bootstrap"
-import { createCollection, getCollectionById, getCollectionsByUser } from "../http/collectionApi"
+import { createCollection, deleteCollection, getCollectionById, getCollectionsByUser } from "../http/collectionApi"
 import { Context } from "../index"
 import { observer } from "mobx-react-lite"
 
@@ -13,6 +13,10 @@ const User = observer(() => {
   const [loading, setLoading] = useState(true)
   const handleClickCreateCollection = async () => {
     await createCollection(collectionName, description, theme, user.email)
+    updateCollectionsUser()
+  }
+  const handleClickDeleteCollection = async (id) => {
+    await deleteCollection(id)
     updateCollectionsUser()
   }
   const updateCollectionsUser = async () => {
@@ -58,6 +62,9 @@ const User = observer(() => {
                 <ListGroup>
                   <ListGroup.Item>Описание: {e.description}</ListGroup.Item>
                   <ListGroup.Item>Тема: {e.theme}</ListGroup.Item>
+                  <ListGroup.Item className="d-flex justify-content-between">
+                    <Button onClick={() => handleClickDeleteCollection(e._id)} variant="danger">Удалить</Button>
+                  </ListGroup.Item>
                 </ListGroup>
               </Card>) : <Spinner className="position-absolute top-50 start-50" animation="border" />}
         </div>
