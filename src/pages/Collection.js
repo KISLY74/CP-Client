@@ -3,6 +3,7 @@ import { useContext, useEffect, useState } from "react"
 import { Context } from "../index"
 import { Form, Spinner, Button, ButtonGroup, Card, ListGroup } from "react-bootstrap"
 import { createItem, deleteItem, getItemsByCollection, editItem } from "../http/itemApi"
+import { changeItemsInCollection } from "../http/collectionApi"
 
 const Collection = observer(() => {
   const { collection } = useContext(Context)
@@ -13,7 +14,8 @@ const Collection = observer(() => {
   const [idItem, setIdItem] = useState()
   const updateItemsCollection = async () => {
     setLoading(false)
-    await getItemsByCollection(collection.id).then((data) => {
+    await getItemsByCollection(collection.id).then(async (data) => {
+      await changeItemsInCollection(collection.id, data.map(e => e._id))
       setItems(data)
     }).finally(() => setLoading(true))
   }
