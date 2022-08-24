@@ -1,7 +1,7 @@
 import axios from "axios"
 import { API_URL } from "./userApi"
 
-export const createCollection = async (name, tags, id) => {
+export const createItem = async (name, tags, id) => {
   await axios.post(`${API_URL}/api/item/create`, { name, tags, id })
 }
 export const getItems = async () => {
@@ -14,4 +14,7 @@ export const getItemsByCollection = async (id) => {
 }
 export const deleteItem = async (id) => {
   await axios.put(`${API_URL}/api/item/delete`, { id })
+}
+export const editItem = async (id, name, tags) => {
+  await axios.put(`${API_URL}/api/item/edit`, { id, name, tags })
 }
