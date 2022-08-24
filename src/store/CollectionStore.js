@@ -14,4 +14,7 @@ export default class CollectionStore {
   get collectionName() {
     return this._collection.name
   }
+  get id() {
+    return this._collection._id
+  }
 }
