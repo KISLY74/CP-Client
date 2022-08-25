@@ -59,6 +59,7 @@ const User = observer(() => {
         user.isAuth ?
           <div className="d-flex">
             <Form className="p-3 d-flex" style={{ minWidth: 450, rowGap: 14, flexDirection: "column" }}>
+              <h2>Страница управления коллекциями</h2>
               <h4>{editMode ? "Редактирование коллекции" : "Создание коллекции"}</h4>
               <Form.Group>
                 <Form.Label>Название коллекции</Form.Label>
