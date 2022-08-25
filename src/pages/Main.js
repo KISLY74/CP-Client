@@ -3,9 +3,10 @@ import { getCollections } from "../http/collectionApi"
 import { ListGroup, Card, Spinner, Container } from "react-bootstrap"
 import { observer } from "mobx-react-lite"
 import { Context } from "../index"
+import { getItems } from "../http/itemApi"
 
 const Main = observer(() => {
-  const { collection } = useContext(Context)
+  const { collection, item } = useContext(Context)
   const [loading, setLoading] = useState(true)
   return (
     <div className="p-3">
@@ -23,7 +24,20 @@ const Main = observer(() => {
           </ListGroup>
         </Card>)}
       </div>
-    </div>
+      <h4>Список последних добавленных элементов</h4>
+      <div className="d-flex" style={{ columnGap: 25, flexWrap: "wrap" }}>
+        {JSON.parse(item.lastAdditionItems).map((e) => <Card className="mb-4" style={{ minWidth: 300, maxWidth: 300 }} >
+          <Card.Body>
+            <Card.Title>
+              {e.name}
+            </Card.Title>
+          </Card.Body>
+          <ListGroup>
+            <ListGroup.Item>Теги: {e.tags.toString()}</ListGroup.Item>
+          </ListGroup>
+        </Card>)}
+      </div>
+    </div >
   )
 })
 
