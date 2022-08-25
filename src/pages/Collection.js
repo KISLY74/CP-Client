@@ -52,14 +52,15 @@ const Collection = observer(() => {
   return (
     <div className="d-flex">
       <Form className="p-3 d-flex" style={{ minWidth: 450, rowGap: 14, flexDirection: "column" }}>
+        <h2>Коллекция: {collection.collectionName}</h2>
         <h4>{editMode ? "Редактирование элемента" : "Создание элемента"}</h4>
         <Form.Group>
-          <Form.Label>Название коллекции</Form.Label>
-          <Form.Control type="text" value={dataForm.name} onChange={(e) => setDataForm({ name: e.target.value, tags: dataForm.tags })} placeholder="Введите название коллекции" />
+          <Form.Label>Название</Form.Label>
+          <Form.Control type="text" value={dataForm.name} onChange={(e) => setDataForm({ name: e.target.value, tags: dataForm.tags })} placeholder="Введите название элемента" />
         </Form.Group>
         <Form.Group>
           <Form.Label>Теги</Form.Label>
-          <Form.Control as="textarea" rows={3} value={dataForm.tags} onChange={(e) => setDataForm({ name: dataForm.name, tags: e.target.value })} />
+          <Form.Control as="textarea" rows={3} value={dataForm.tags} placeholder="Введите теги через запятую" onChange={(e) => setDataForm({ name: dataForm.name, tags: e.target.value })} />
         </Form.Group>
         {editMode ? <ButtonGroup>
           <Button variant="dark" onClick={() => handleClickEditItem()}>Отредактировать элемент</Button>
