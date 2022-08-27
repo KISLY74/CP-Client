@@ -10,6 +10,7 @@ const Main = observer(() => {
   const [loading, setLoading] = useState(true)
   return (
     <div className="p-3">
+      <h2>Главная страница</h2>
       <h4>Топ 5 самых больших коллекций</h4>
       <div className="d-flex" style={{ columnGap: 25, flexWrap: "wrap" }}>
         {JSON.parse(collection.biggest).map((e) => <Card className="mb-4" style={{ minWidth: 300, maxWidth: 300 }} >
