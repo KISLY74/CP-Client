@@ -1,7 +1,7 @@
 import { Button, Navbar } from "react-bootstrap"
 import Nav from "react-bootstrap/Nav"
 import { NavLink, useNavigate } from "react-router-dom"
-import { USER_ROUTE, LOGIN_ROUTE, ADMIN_ROUTE, MAIN_ROUTE } from "../utils/routes"
+import { USER_ROUTE, LOGIN_ROUTE, ADMIN_ROUTE, MAIN_ROUTE, SEARCH_RESULTS_ROUTE } from "../utils/routes"
 import { useContext, useEffect } from "react"
 import { Context } from "../index"
 import { observer } from "mobx-react-lite"
@@ -26,6 +26,7 @@ const NavBar = observer(() => {
           {user.roles ? user.roles.includes("ADMIN") ? <NavLink className="nav-link" to={ADMIN_ROUTE}>Администратор</NavLink> : false : user.setUser(JSON.parse(localStorage.getItem('userStore')))}
           <NavLink className="nav-link" to={MAIN_ROUTE}>Главная</NavLink>
           <NavLink className="nav-link" to={USER_ROUTE}>Пользователь</NavLink>
+          <NavLink className="nav-link" to={SEARCH_RESULTS_ROUTE}>Результаты поиска</NavLink>
           <Button variant={"outline-light"} onClick={() => logOut()}>{user.isAuth ? "Выйти" : "Авторизация"}</Button>
         </Nav> :
         <Nav style={{ color: 'white' }}>
