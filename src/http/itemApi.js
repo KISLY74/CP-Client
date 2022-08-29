@@ -1,8 +1,8 @@
 import axios from "axios"
 import { API_URL } from "./userApi"
 
-export const createItem = async (name, tags, id) => {
-  await axios.post(`${API_URL}/api/item/create`, { name, tags, id })
+export const createItem = async (name, tags, id, additionalFields) => {
+  await axios.post(`${API_URL}/api/item/create`, { name, tags, id, additionalFields })
 }
 export const getItems = async () => {
   const data = await axios.get(`${API_URL}/api/item/get/all`)
