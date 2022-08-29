@@ -3,7 +3,7 @@ import { makeAutoObservable } from "mobx"
 export default class CollectionStore {
   constructor() {
     this._collection = {}
-    this._biggest = ""
+    this._biggest = []
     this._additionalFields = []
     makeAutoObservable(this)
   }
