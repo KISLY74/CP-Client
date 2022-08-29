@@ -13,7 +13,7 @@ const Main = observer(() => {
       <h2>Главная страница</h2>
       <h4>Топ 5 самых больших коллекций</h4>
       <div className="d-flex" style={{ columnGap: 25, flexWrap: "wrap" }}>
-        {JSON.parse(collection.biggest).map((e) => <Card className="mb-4" style={{ minWidth: 300, maxWidth: 300 }} >
+        {collection.biggest.map((e) => <Card key={e._id} className="mb-4" style={{ minWidth: 300, maxWidth: 300 }} >
           <Card.Body>
             <Card.Title>
               {e.name}
@@ -27,7 +27,7 @@ const Main = observer(() => {
       </div>
       <h4>Список последних добавленных элементов</h4>
       <div className="d-flex" style={{ columnGap: 25, flexWrap: "wrap" }}>
-        {JSON.parse(item.lastAdditionItems).map((e) => <Card className="mb-4" style={{ minWidth: 300, maxWidth: 300 }} >
+        {item.lastAdditionItems.map((e) => <Card key={e._id} className="mb-4" style={{ minWidth: 300, maxWidth: 300 }} >
           <Card.Body>
             <Card.Title>
               {e.name}

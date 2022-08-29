@@ -14,11 +14,11 @@ const App = observer(() => {
   const [loading, setLoading] = useState(true)
   const getCollectionsAndSetToStore = async () => {
     await getCollections().then((data) => {
-      collection.setBiggest(JSON.stringify(data.sort((a, b) => b.items.length - a.items.length).slice(0, 5)))
+      collection.setBiggest(data.sort((a, b) => b.items.length - a.items.length).slice(0, 5))
     })
   }
   const getItemsAndSetToStore = async () => {
-    await getItems().then((data) => item.setLastAdditionItems(JSON.stringify(data.sort((a, b) => new Date(b.dateAddition) - new Date(a.dateAddition)).slice(0, 5))))
+    await getItems().then((data) => item.setLastAdditionItems(data.sort((a, b) => new Date(b.dateAddition) - new Date(a.dateAddition)).slice(0, 5)))
   }
   useEffect(() => {
     getCollectionsAndSetToStore()
