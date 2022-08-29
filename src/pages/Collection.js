@@ -1,12 +1,14 @@
 import { observer } from "mobx-react-lite"
 import { useContext, useEffect, useState } from "react"
 import { Context } from "../index"
-import { Form, Spinner, Button, ButtonGroup, Card, ListGroup } from "react-bootstrap"
+import { NavLink } from "react-router-dom"
+import { Form, Spinner, Button, ButtonGroup, Table } from "react-bootstrap"
 import { createItem, deleteItem, getItemsByCollection, editItem } from "../http/itemApi"
 import { addAdditionalFields, getAdditionalFields, changeItemsInCollection } from "../http/collectionApi"
+import { ITEM_ROUTE } from "../utils/routes"
 
 const Collection = observer(() => {
-  const { collection } = useContext(Context)
+  const { collection, item } = useContext(Context)
   const [items, setItems] = useState([])
   const [loading, setLoading] = useState(true)
   const [dataForm, setDataForm] = useState({})
@@ -27,9 +29,10 @@ const Collection = observer(() => {
     let additionalFields = [{}, {}, {}, {}]
     for (let i = 0; i < names.length; i++) {
       for (let j = 0; j < fields[i].length; j++) {
-        if (fields[i][j].value === '') {
-          return alert("Запоните пустые поля")
+        if (i === 2) {
+          additionalFields[i][names[i][j].textContent] = fields[i][j].childNodes[0].checked
         } else {
+          if (fields[i][j].value === '') alert("Запоните пустые поля")
           additionalFields[i][names[i][j].textContent] = fields[i][j].value
         }
       }
@@ -187,21 +190,35 @@ const Collection = observer(() => {
         <h4>Список элементов</h4>
         <div className="d-flex mt-4" style={{ columnGap: 20, flexWrap: "wrap" }}>
           {loading ?
-            items.map((e, i) =>
-              <Card className="mb-4" style={{ minWidth: 300, maxWidth: 300 }} key={i}>
-                <Card.Body>
-                  <Card.Title>
-                    {e.name}
-                  </Card.Title>
-                </Card.Body>
-                <ListGroup>
-                  <ListGroup.Item>Теги: {e.tags.toString()}</ListGroup.Item>
-                  <ListGroup.Item className="d-flex justify-content-between">
-                    <Button onClick={() => handleClickDeleteItem(e._id)} variant="danger">Удалить</Button>
-                    <Button variant="dark" onClick={() => { handleClickEditMode(e._id) }}>Редактировать</Button>
-                  </ListGroup.Item>
-                </ListGroup>
-              </Card>) : <Spinner className="position-absolute top-50 start-50" animation="border" />}
+            <Table bordered hover>
+              <thead>
+                <tr>
+                  {items[0] ? Object.keys(items[0]).map((head, i) => {
+                    if (i < 3 && i > 0) return <th>{head}</th>
+                  }) : false}
+                  <th>Удалить элемент</th>
+                  <th>Страница элемента</th>
+                </tr>
+              </thead>
+              <tbody>
+                {items.map(e => {
+                  return <tr>
+                    {Object.values(e).map(((val, i) => {
+                      if (i < 3 && i > 0)
+                        return <td>{val.toString()}</td>
+                    }))}<td>
+                      <ButtonGroup>
+                        <Button onClick={() => handleClickDeleteItem(e._id)} variant="danger">Удалить</Button>
+                      </ButtonGroup>
+                    </td><td>
+                      <Button onClick={() => localStorage.setItem('itemStore', JSON.stringify(e))}>
+                        <NavLink className="text-light text-decoration-none" to={ITEM_ROUTE}>Перейти</NavLink>
+                      </Button>
+                    </td>
+                  </tr>
+                })}
+              </tbody>
+            </Table> : <Spinner className="position-absolute top-50 start-50" animation="border" />}
         </div>
       </div >
     </div >
