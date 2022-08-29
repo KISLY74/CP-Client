@@ -4,6 +4,7 @@ export default class CollectionStore {
   constructor() {
     this._collection = {}
     this._biggest = ""
+    this._additionalFields = []
     makeAutoObservable(this)
   }
   setCollection(collection) {
@@ -11,6 +12,9 @@ export default class CollectionStore {
   }
   setBiggest(collections) {
     this._biggest = collections
+  }
+  setAdditionalFields(fields) {
+    this._additionalFields = fields
   }
   get collection() {
     return this._collection
@@ -23,5 +27,8 @@ export default class CollectionStore {
   }
   get biggest() {
     return this._biggest
+  }
+  get additionalFields() {
+    return this._additionalFields
   }
 }
