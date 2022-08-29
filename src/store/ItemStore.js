@@ -18,4 +18,10 @@ export default class ItemStore {
   get lastAdditionItems() {
     return this._lastAdditionItems
   }
+  get name() {
+    return this._item.name
+  }
+  get id() {
+    return this._item._id
+  }
 }
