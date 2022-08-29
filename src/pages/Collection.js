@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from "react"
 import { Context } from "../index"
 import { Form, Spinner, Button, ButtonGroup, Card, ListGroup } from "react-bootstrap"
 import { createItem, deleteItem, getItemsByCollection, editItem } from "../http/itemApi"
-import { changeItemsInCollection } from "../http/collectionApi"
+import { addAdditionalFields, getAdditionalFields, changeItemsInCollection } from "../http/collectionApi"
 
 const Collection = observer(() => {
   const { collection } = useContext(Context)
@@ -12,6 +12,10 @@ const Collection = observer(() => {
   const [dataForm, setDataForm] = useState({})
   const [editMode, setEditMode] = useState(false)
   const [idItem, setIdItem] = useState()
+  const [isShow, setIsShow] = useState(false)
+  const [showFields, setShowFields] = useState(false)
+  let names = [document.querySelectorAll(".names-strings"), document.querySelectorAll(".names-numbers"), document.querySelectorAll(".names-booleans"), document.querySelectorAll(".names-dates")]
+  let fields = [document.querySelectorAll(".strings"), document.querySelectorAll(".numbers"), document.querySelectorAll(".booleans"), document.querySelectorAll(".dates")]
   const updateItemsCollection = async () => {
     setLoading(false)
     await getItemsByCollection(collection.id).then(async (data) => {
@@ -19,10 +23,32 @@ const Collection = observer(() => {
       setItems(data)
     }).finally(() => setLoading(true))
   }
-  const handleClickCreateItem = async () => {
-    await createItem(dataForm.name, dataForm.tags.split(','), collection.id)
-    updateItemsCollection()
+  const getAddtitonalFieldsByForm = () => {
+    let additionalFields = [{}, {}, {}, {}]
+    for (let i = 0; i < names.length; i++) {
+      for (let j = 0; j < fields[i].length; j++) {
+        if (fields[i][j].value === '') {
+          return alert("Запоните пустые поля")
+        } else {
+          additionalFields[i][names[i][j].textContent] = fields[i][j].value
+        }
+      }
+    }
+    return additionalFields
+  }
+  const clearFormCollection = () => {
     setDataForm({ name: "", tags: "" })
+    for (let i = 0; i < fields.length; i++) {
+      for (let j = 0; j < fields[i].length; i++) {
+        fields[i][j].value = ""
+      }
+    }
+  }
+  const handleClickCreateItem = async (e) => {
+    await createItem(dataForm.name, dataForm.tags.split(','), collection.id, getAddtitonalFieldsByForm())
+    updateItemsCollection()
+    handleClickHideFields()
+    clearFormCollection()
   }
   const handleClickDeleteItem = async (id) => {
     await deleteItem(id)
@@ -45,13 +71,33 @@ const Collection = observer(() => {
       }
     })
   }
+  const handleClickShowFields = () => {
+    setIsShow(true)
+  }
+  const handleClickHideFields = () => {
+    setIsShow(false)
+  }
+  const updateAdditionalFields = async () => {
+    await getAdditionalFields(collection.id).then((data) => {
+      collection.setAdditionalFields([data.stringsFields, data.numbersFields, data.booleansFields, data.datesFields])
+    }).finally(() => setShowFields(true))
+  }
+  const handleClickAddFields = async () => {
+    let controls = document.querySelectorAll(".controls")
+    let names = []
+    controls.forEach(e => names.push(e.value))
+    await addAdditionalFields(collection.id, names[0], names[1], names[2], names[3]).finally(() => {
+      updateAdditionalFields()
+    })
+  }
   useEffect(() => {
-    collection.setCollection(JSON.parse(localStorage.getItem('collectionStore')))
     updateItemsCollection()
+    collection.setCollection(JSON.parse(localStorage.getItem('collectionStore')))
+    updateAdditionalFields()
   }, [])
   return (
-    <div className="d-flex">
-      <Form className="p-3 d-flex" style={{ minWidth: 450, rowGap: 14, flexDirection: "column" }}>
+    <div>
+      <Form className="p-3 d-flex" style={{ maxWidth: 850, rowGap: 14, flexDirection: "column" }}>
         <h2>Коллекция: {collection.collectionName}</h2>
         <h4>{editMode ? "Редактирование элемента" : "Создание элемента"}</h4>
         <Form.Group>
@@ -62,11 +108,81 @@ const Collection = observer(() => {
           <Form.Label>Теги</Form.Label>
           <Form.Control as="textarea" rows={3} value={dataForm.tags} placeholder="Введите теги через запятую" onChange={(e) => setDataForm({ name: dataForm.name, tags: e.target.value })} />
         </Form.Group>
+        {showFields ? collection.additionalFields[0] ? collection.additionalFields[0].map((e, i) => {
+          if (e) {
+            return <Form.Group key={e}>
+              <Form.Label className="names-strings">{e}</Form.Label>
+              <Form.Control type="text" className="strings" placeholder={`Введите поле ${e}`}></Form.Control>
+            </Form.Group>
+          }
+        }) : false : ""}
+        {showFields ? collection.additionalFields[1] ? collection.additionalFields[1].map((e, i) => {
+          if (e) {
+            return <Form.Group key={e}>
+              <Form.Label className="names-numbers">{e}</Form.Label>
+              <Form.Control type="text" className="numbers" placeholder={`Введите поле ${e}`}></Form.Control>
+            </Form.Group>
+          }
+        }) : false : ""}
+        {showFields ? collection.additionalFields[2] ? collection.additionalFields[2].map((e, i) => {
+          if (e) {
+            return <Form.Group key={e}>
+              <Form.Label className="names-booleans">{e}</Form.Label>
+              <Form.Check className="booleans" type="checkbox"></Form.Check>
+            </Form.Group>
+          }
+        }) : false : ""}
+        {showFields ? collection.additionalFields[3] ? collection.additionalFields[3].map((e, i) => {
+          if (e) {
+            return <Form.Group key={e}>
+              <Form.Label className="names-dates">{e}</Form.Label>
+              <Form.Control className="dates" type="date"></Form.Control>
+            </Form.Group>
+          }
+        }) : false : ""}
+        {!isShow ? <Button onClick={() => handleClickShowFields()}>Добавление дополнительных полей</Button> : <Button onClick={() => handleClickHideFields()}>Скрыть дополнительные поля</Button>}
+        {isShow ?
+          <div>
+            <div>
+              <h5>Строковые</h5>
+              <div className="d-flex align-items-center" style={{ columnGap: 10 }}>
+                <Form.Group className="d-flex" style={{ columnGap: 10 }}>
+                  <Form.Control type="text" className="controls" placeholder="Название поля"></Form.Control>
+                </Form.Group>
+              </div>
+            </div>
+            <div>
+              <h5>Целочисленные</h5>
+              <div className="d-flex align-items-center" style={{ columnGap: 10 }}>
+                <Form.Group className="d-flex" style={{ columnGap: 10 }}>
+                  <Form.Control type="text" className="controls" placeholder="Название поля"></Form.Control>
+                </Form.Group>
+              </div>
+            </div>
+            <div>
+              <h5>Логические</h5>
+              <div className="d-flex align-items-center" style={{ columnGap: 10 }}>
+                <Form.Group className="d-flex" style={{ columnGap: 10 }}>
+                  <Form.Control type="text" className="controls" placeholder="Название поля"></Form.Control>
+                </Form.Group>
+              </div>
+            </div>
+            <div>
+              <h5>Даты</h5>
+              <div className="d-flex align-items-center" style={{ columnGap: 10 }}>
+                <Form.Group className="d-flex" style={{ columnGap: 10 }}>
+                  <Form.Control type="text" className="controls" placeholder="Название поля"></Form.Control>
+                </Form.Group>
+              </div>
+            </div>
+            <Button variant="dark" className="d-flex mt-2" onClick={(e) => handleClickAddFields(e)}>Добавить</Button>
+          </div> : false
+        }
         {editMode ? <ButtonGroup>
-          <Button variant="dark" onClick={() => handleClickEditItem()}>Отредактировать элемент</Button>
+          < Button variant="dark" onClick={() => handleClickEditItem()}> Отредактировать элемент</Button >
           <Button variant="secondary" onClick={() => handleClickCancel()}>Отменить</Button>
-        </ButtonGroup> : <Button variant="success" onClick={() => handleClickCreateItem()}>Создать элемент</Button>}
-      </Form>
+        </ButtonGroup > : <Button variant="success" onClick={(e) => handleClickCreateItem(e)}>Создать элемент</Button>}
+      </Form >
       <div className="p-3">
         <h4>Список элементов</h4>
         <div className="d-flex mt-4" style={{ columnGap: 20, flexWrap: "wrap" }}>
