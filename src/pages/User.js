@@ -80,7 +80,7 @@ const User = observer(() => {
               {editMode ? <ButtonGroup>
                 <Button variant="dark" onClick={() => handleClickEditCollection()}>Отредактировать коллекцию</Button>
                 <Button variant="secondary" onClick={() => handleClickCancel()}>Отменить</Button>
-              </ButtonGroup> : <Button onClick={() => handleClickCreateCollection()}>Создать коллекцию</Button>}
+              </ButtonGroup> : <Button variant="success" onClick={() => handleClickCreateCollection()}>Создать коллекцию</Button>}
             </Form>
             <div className="p-3">
               <h4>Список коллекций</h4>
