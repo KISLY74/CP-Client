@@ -1,8 +1,11 @@
-import { useState } from "react"
+import { observer } from "mobx-react-lite"
+import { useState, useEffect, useContext } from "react"
 import { Form, FormGroup, Button, Spinner, Card, ListGroup } from "react-bootstrap"
+import { Context } from "../index"
 import { getItems } from "../http/itemApi"
 
-const SearchResults = () => {
+const SearchResults = observer(() => {
+  const { user } = useContext(Context)
   const [tag, setTag] = useState("")
   const [itemsByTag, setItemsByTag] = useState([])
   const [loading, setLoading] = useState(true)
@@ -10,11 +13,14 @@ const SearchResults = () => {
   const searchItemsByTag = async (tagInput) => {
     setLoading(false)
     await getItems().then((data) => data.map(e => {
-      e.tags = e.tags.map(el => el.trim(""))  
+      e.tags = e.tags.map(el => el.trim(""))
       e.tags.map((str => str.includes(tagInput || tag) ? items.push(e) : false))
     })).finally(() => setLoading(true))
     setItemsByTag(items)
   }
+  useEffect(() => {
+    user.setIsView(false)
+  }, [])
   return (
     <div className="p-3">
       <h2>Страница результатов поиска</h2>
@@ -44,6 +50,6 @@ const SearchResults = () => {
       </div>
     </div>
   )
-}
+})
 
 export default SearchResults
