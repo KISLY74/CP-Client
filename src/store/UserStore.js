@@ -5,7 +5,6 @@ export default class UserStore {
     this._isAuth = false
     this._isBlock = false
     this._user = {}
-    this._viewUser = {}
     this._isView = false
     makeAutoObservable(this)
   }
@@ -17,9 +16,6 @@ export default class UserStore {
   }
   setUser(user) {
     this._user = user
-  }
-  setViewUser(user) {
-    this._viewUser = user
   }
   setIsBlock(bool) {
     this._isBlock = bool
@@ -41,8 +37,5 @@ export default class UserStore {
   }
   get roles() {
     return this._user.roles
-  }
-  get viewUser() {
-    return this._viewUser
   }
 }
