@@ -14,20 +14,19 @@ const User = observer((props) => {
   }, [])
   return (
     <div>
-      {user.isAuth ?
-        <div>
-          {props.isOwn ?
-            <div>
-              {collection.isLoad ?
-                <div>
-                  <CollectionControlPanel />
-                  <ListCollection isOwn={true} />
-                </div> : false}
-            </div> : <div>
-              {user.roles.includes("ADMIN") ? <CollectionControlPanel /> : false}
-              {collection.isLoad ? <ListCollection isOwn={false} /> : false}
-            </div>}
-        </div > : history(LOGIN_ROUTE)}
+      <div>
+        {props.isOwn ?
+          <div>
+            {collection.isLoad ?
+              <div>
+                <CollectionControlPanel />
+                <ListCollection isOwn={true} />
+              </div> : false}
+          </div> : <div>
+            {!user.isAuth ? user.setUser({ username: "Гость", roles: ["USER"] }) : user.roles.includes("ADMIN") ? <CollectionControlPanel /> : false}
+            {collection.isLoad ? <ListCollection isOwn={false} /> : false}
+          </div>}
+      </div>
     </div >
   )
 })
