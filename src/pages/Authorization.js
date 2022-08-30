@@ -14,6 +14,7 @@ const Authorization = observer(() => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(true)
+  const [isAdmin, setIsAdmin] = useState(false)
   const history = useNavigate()
   const checkStatusAuth = async () => {
     await getOneUser(email).then((res) => {
@@ -36,7 +37,7 @@ const Authorization = observer(() => {
         user.setIsAuth(false)
         await login(email, password).then(() => checkStatusAuth()).catch((e) => alert(e.response.data.message)).finally(() => setLoading(true))
       } else {
-        await regin(email, password, username).then(() => history(LOGIN_ROUTE)).catch((e) => alert(e.response.data.message)).finally(() => setLoading(true))
+        await regin(email, password, username, isAdmin).then(() => history(LOGIN_ROUTE)).catch((e) => alert(e.response.data.message)).finally(() => setLoading(true))
       }
     } catch (e) {
       console.log(e)
@@ -78,6 +79,12 @@ const Authorization = observer(() => {
                 </div> : <div>Есть аккаунт?
                   <NavLink style={{ textDecoration: "none" }} to="/login"> Войдите!</NavLink>
                 </div>}
+                {!isLogin ?
+                  <Form.Group className="d-flex" style={{ columnGap: 10 }}>
+                    <Form.Label>Зарегистрироваться в качестве админа</Form.Label>
+                    <Form.Check type="checkbox" onChange={(e) => setIsAdmin(e.target.checked)}></Form.Check>
+                  </Form.Group>
+                  : false}
                 <Button className="mt-3" variant={"outline-success"} onClick={() => handleClickReginLogin()}>{isLogin ? "Войти" : "Зарегистрироваться"}</Button>
               </Row>
             </Form>
