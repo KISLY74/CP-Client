@@ -8,7 +8,10 @@ const CollectionControlPanel = observer(() => {
   const { user, collection } = useContext(Context)
   const handleClickCreateCollection = async () => {
     collection.setIsLoad(false)
-    await createCollection(collection.fields.name, collection.fields.description, collection.fields.theme, JSON.parse(localStorage.getItem('viewUser')).email).finally(() => {
+    user.isView ? await createCollection(collection.fields.name, collection.fields.description, collection.fields.theme, JSON.parse(localStorage.getItem('viewUser')).email).finally(() => {
+      collection.setIsLoad(true)
+      handleClickCancel()
+    }) : await createCollection(collection.fields.name, collection.fields.description, collection.fields.theme, user.email).finally(() => {
       collection.setIsLoad(true)
       handleClickCancel()
     })
@@ -25,6 +28,7 @@ const CollectionControlPanel = observer(() => {
     collection.setEditMode(false)
   }
   useEffect(() => {
+    collection.setFields({ id: "", name: "", description: "", theme: "Книги" })
     user.setIsView(localStorage.getItem('isView'))
   }, [])
   return <Form className="p-3 d-flex" style={{ minWidth: 450, rowGap: 14, flexDirection: "column" }}>
