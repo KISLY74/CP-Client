@@ -1,8 +1,8 @@
-import { Table, Form, ButtonGroup, Button, Spinner } from "react-bootstrap"
+import { Table, Form, ButtonGroup, Button, Spinner, ListGroup } from "react-bootstrap"
 import { useContext, useEffect, useState } from "react"
 import { getUsers, changeStatus, getOneUser, deleteUser, addUserToAdmins, removeUserFromAdmins } from "../http/userApi"
 import { LOGIN_ROUTE, USER_ROUTE } from "../utils/routes"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, NavLink } from "react-router-dom"
 import { observer } from "mobx-react-lite"
 import { Context } from "../index"
 
@@ -27,6 +27,7 @@ const Admin = observer(() => {
     return users
   }
   useEffect(() => {
+    user.setIsView(false)
     updateTableUsers()
   }, [])
   let checkboxes = []
@@ -88,6 +89,13 @@ const Admin = observer(() => {
       }
     })
   }
+  const handleClickViewUser = (e) => {
+    users.map(el => {
+      if (Object.values(el)[0] === e[0]) {
+        user.setIsView(true)
+      }
+    })
+  }
   return (
     <div>
       {user.isAuth ?
@@ -112,22 +120,25 @@ const Admin = observer(() => {
             <thead>
               <tr>
                 <th><Form.Check className="checkbox-all" onClick={() => handleClickCheckboxAll()} />Выделить/Снять всё</th>
-                {headers ? headers.map((e, i) => (i !== 2 && i !== 0 && i !== 6) ? <th>{`${e}`}</th> : "") : ""}
+                {headers ? headers.map((e, i) => (i !== 2 && i !== 0 && i !== 6) ? <th key={e}>{`${e}`}</th> : "") : ""}
+                <th>Страница пользователя</th>
               </tr>
             </thead>
             <tbody>
               {usersValues ? usersValues.map((el, ind) => el ? <tr key={ind}><td><Form.Check onClick={() => handleClickCheckbox()} className="checkbox" key={ind} /></td>{el.map((e, i) => {
                 if (i !== 2 && i !== 0 && i !== 6) return <td key={i}>{`${e}`}</td>
-              })}</tr> : '') : ''}
+              })}<td><Button onClick={() => handleClickViewUser(el)}>
+                <NavLink className="text-light text-decoration-none" to={USER_ROUTE}>Перейти</NavLink>
+              </Button></td></tr> : '') : ''}
             </tbody>
-          </Table>
+          </Table >
           <ButtonGroup className="d-flex" aria-label="Basic example" onClick={(e) => handleClickAddRemove(e)}>
             <Button variant="outline-success" id={1}>Add to admins</Button>
             <Button variant="outline-danger" id={2}>Remove from admins</Button>
           </ButtonGroup>
-        </div>
+        </div >
         : history(LOGIN_ROUTE)}
-    </div>
+    </div >
   )
 })
 
