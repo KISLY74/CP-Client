@@ -2,7 +2,7 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { Container, Card, Form, Button, Row, Spinner } from "react-bootstrap"
 import { login, regin, getOneUser } from "../http/userApi"
-import { ADMIN_ROUTE, LOGIN_ROUTE, USER_ROUTE } from "../utils/routes";
+import { ADMIN_ROUTE, LOGIN_ROUTE, OWN_PAGE_ROUTE } from "../utils/routes";
 import { observer } from "mobx-react-lite";
 import { Context } from "../index";
 
@@ -26,7 +26,7 @@ const Authorization = observer(() => {
       user.setUser(res.data)
       localStorage.setItem('userStore', JSON.stringify(res.data))
       localStorage.setItem("username", res.data.username)
-      res.data.roles.includes("ADMIN") ? history(ADMIN_ROUTE) : history(USER_ROUTE)
+      res.data.roles.includes("ADMIN") ? history(ADMIN_ROUTE) : history(OWN_PAGE_ROUTE)
     })
   }
   const handleClickReginLogin = async () => {
