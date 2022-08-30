@@ -35,7 +35,7 @@ const Main = observer(() => {
           <ListGroup>
             <ListGroup.Item>Описание: {e.description}</ListGroup.Item>
             <ListGroup.Item>Тема: {e.theme}</ListGroup.Item>
-            <Button variant="secondary" onClick={() => handleClickNormalUser(e)}>Перейти к пользователю</Button>
+            <Button variant="secondary" onClick={() => handleClickNormalUser(e._id)}>Перейти к пользователю</Button>
           </ListGroup>
         </Card>)}
       </div>
