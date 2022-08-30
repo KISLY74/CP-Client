@@ -46,3 +46,7 @@ export const removeUserFromAdmins = async (email) => {
   const data = await axios.put(`${API_URL}/api/user/remove`, { email })
   return data
 }
+export const getUserByCollection = async (id) => {
+  const res = await axios.post(`${API_URL}/api/user/getByIdCollection`, { id })
+  return res.data
+}
