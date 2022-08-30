@@ -92,6 +92,7 @@ const Admin = observer(() => {
   const handleClickViewUser = (e) => {
     users.map(el => {
       if (Object.values(el)[0] === e[0]) {
+        localStorage.setItem('viewUser', JSON.stringify(el))
         user.setIsView(true)
       }
     })
