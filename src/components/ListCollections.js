@@ -49,6 +49,7 @@ const ListCollection = observer((props) => {
     checkIsViewAndUpdate()
   }
   useEffect(() => {
+    props.isOwn ? user.setIsView(false) : user.setIsView(true)
     checkIsViewAndUpdate()
   }, [])
   return <div className="p-3">
