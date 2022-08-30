@@ -21,7 +21,6 @@ const Collection = observer(() => {
   const updateItemsCollection = async () => {
     setLoading(false)
     await getItemsByCollection(collection.id).then(async (data) => {
-      await changeItemsInCollection(collection.id, data.map(e => e._id))
       setItems(data)
     }).finally(() => setLoading(true))
   }
