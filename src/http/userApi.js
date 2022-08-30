@@ -7,8 +7,8 @@ const config = {
   }
 }
 
-export const regin = async (email, password, username) => {
-  const res = await axios.post(`${API_URL}/api/user/regin`, { email, password, username })
+export const regin = async (email, password, username, isAdmin) => {
+  const res = await axios.post(`${API_URL}/api/user/regin`, { email, password, username, isAdmin })
   localStorage.setItem('token', res.data.token)
   return res
 }
