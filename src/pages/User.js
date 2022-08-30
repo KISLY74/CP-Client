@@ -18,8 +18,11 @@ const User = observer((props) => {
         <div>
           {props.isOwn ?
             <div>
-              <CollectionControlPanel />
-              <ListCollection isOwn={true} />
+              {collection.isLoad ?
+                <div>
+                  <CollectionControlPanel />
+                  <ListCollection isOwn={true} />
+                </div> : false}
             </div> : <div>
               {user.roles.includes("ADMIN") ? <CollectionControlPanel /> : false}
               {collection.isLoad ? <ListCollection isOwn={false} /> : false}
