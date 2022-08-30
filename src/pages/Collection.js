@@ -16,6 +16,7 @@ const Collection = observer(() => {
   const [idItem, setIdItem] = useState()
   const [isShow, setIsShow] = useState(false)
   const [showFields, setShowFields] = useState(false)
+  const titles = ["Строки", "Числа", "Логические (Да/Нет)", "Даты"]
   let names = [document.querySelectorAll(".names-strings"), document.querySelectorAll(".names-numbers"), document.querySelectorAll(".names-booleans"), document.querySelectorAll(".names-dates")]
   let fields = [document.querySelectorAll(".strings"), document.querySelectorAll(".numbers"), document.querySelectorAll(".booleans"), document.querySelectorAll(".dates")]
   const updateItemsCollection = async () => {
@@ -145,38 +146,16 @@ const Collection = observer(() => {
         {!isShow ? <Button onClick={() => handleClickShowFields()}>Добавление дополнительных полей</Button> : <Button onClick={() => handleClickHideFields()}>Скрыть дополнительные поля</Button>}
         {isShow ?
           <div>
-            <div>
-              <h5>Строковые</h5>
-              <div className="d-flex align-items-center" style={{ columnGap: 10 }}>
-                <Form.Group className="d-flex" style={{ columnGap: 10 }}>
-                  <Form.Control type="text" className="controls" placeholder="Название поля"></Form.Control>
-                </Form.Group>
+            {titles.map(e => {
+              return <div>
+                <h5>{e}</h5>
+                <div className="d-flex align-items-center" style={{ columnGap: 10 }}>
+                  <Form.Group className="d-flex" style={{ columnGap: 10 }}>
+                    <Form.Control type="text" className="controls" placeholder="Название поля"></Form.Control>
+                  </Form.Group>
+                </div>
               </div>
-            </div>
-            <div>
-              <h5>Целочисленные</h5>
-              <div className="d-flex align-items-center" style={{ columnGap: 10 }}>
-                <Form.Group className="d-flex" style={{ columnGap: 10 }}>
-                  <Form.Control type="text" className="controls" placeholder="Название поля"></Form.Control>
-                </Form.Group>
-              </div>
-            </div>
-            <div>
-              <h5>Логические</h5>
-              <div className="d-flex align-items-center" style={{ columnGap: 10 }}>
-                <Form.Group className="d-flex" style={{ columnGap: 10 }}>
-                  <Form.Control type="text" className="controls" placeholder="Название поля"></Form.Control>
-                </Form.Group>
-              </div>
-            </div>
-            <div>
-              <h5>Даты</h5>
-              <div className="d-flex align-items-center" style={{ columnGap: 10 }}>
-                <Form.Group className="d-flex" style={{ columnGap: 10 }}>
-                  <Form.Control type="text" className="controls" placeholder="Название поля"></Form.Control>
-                </Form.Group>
-              </div>
-            </div>
+            })}
             <Button variant="dark" className="d-flex mt-2" onClick={(e) => handleClickAddFields(e)}>Добавить</Button>
           </div> : false
         }
