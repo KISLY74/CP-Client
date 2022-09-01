@@ -27,7 +27,7 @@ const Admin = observer(() => {
     return users
   }
   useEffect(() => {
-    user.setIsView(false)
+    localStorage.setItem('isView', false)
     updateTableUsers()
   }, [])
   let checkboxes = []
@@ -93,7 +93,7 @@ const Admin = observer(() => {
     users.map(el => {
       if (Object.values(el)[0] === e[0]) {
         localStorage.setItem('viewUser', JSON.stringify(el))
-        user.setIsView(true)
+        localStorage.setItem('isView', true)
       }
     })
   }
