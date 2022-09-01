@@ -5,14 +5,19 @@ import ItemControlPanel from "../components/ItemControlPanel"
 import ListItems from "../components/ListItems"
 
 const Collection = observer(() => {
-  const { collection, item } = useContext(Context)
+  const { collection, item, user } = useContext(Context)
   useEffect(() => {
     collection.setCollection(JSON.parse(localStorage.getItem('collectionStore')))
   }, [])
   return (
     <div>
-      <ItemControlPanel />
-      {item.isLoad ? <ListItems /> : false}
+      {!localStorage.getItem("isView") ? <div>
+        {user.isAuth ? user.roles.includes("ADMIN") ? <ItemControlPanel /> : false : false}
+        {item.isLoad ? <ListItems isView={false} /> : false}
+      </div> : <div>
+        {user.isAuth ? user.roles.includes("ADMIN") ? <ItemControlPanel /> : false : false}
+        {item.isLoad ? <ListItems isView={true} /> : false}
+      </div>}
     </div >
   )
 })
