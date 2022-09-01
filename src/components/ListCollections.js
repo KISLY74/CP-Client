@@ -36,11 +36,11 @@ const ListCollection = observer((props) => {
     if (props.isOwn) {
       updateCollectionsUser()
     } else {
-      if (user.isView) {
+      if (localStorage.getItem('isView')) {
         updateCollectionViewUser()
       } else {
         history(OWN_PAGE_ROUTE)
-        user.setIsView(false)
+        localStorage.setItem('isView', false)
       }
     }
   }
@@ -49,7 +49,7 @@ const ListCollection = observer((props) => {
     checkIsViewAndUpdate()
   }
   useEffect(() => {
-    props.isOwn ? user.setIsView(false) : user.setIsView(true)
+    props.isOwn ? localStorage.setItem('isView', false) : localStorage.setItem('isView', true)
     checkIsViewAndUpdate()
   }, [])
   return <div className="p-3">
@@ -63,6 +63,7 @@ const ListCollection = observer((props) => {
                 <Badge bg="success" onClick={() => {
                   localStorage.setItem('collectionStore', JSON.stringify(e))
                   history(COLLECTION_ROUTE)
+                  localStorage.setItem('isView', true)
                 }} style={{ cursor: "pointer" }}>{e.name}</Badge>
               </h4>
             </Card.Title>
