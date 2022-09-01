@@ -18,9 +18,6 @@ const SearchResults = observer(() => {
     })).finally(() => setLoading(true))
     setItemsByTag(items)
   }
-  useEffect(() => {
-    user.setIsView(false)
-  }, [])
   return (
     <div className="p-3">
       <h2>Страница результатов поиска</h2>
