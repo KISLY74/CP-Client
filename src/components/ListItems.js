@@ -6,8 +6,8 @@ import { useContext, useEffect, useState } from "react"
 import { Context } from "../index"
 import { deleteItem, getItemsByCollection } from "../http/itemApi"
 
-const ListItems = observer(() => {
-  const { collection, item } = useContext(Context)
+const ListItems = observer((props) => {
+  const { collection, item, user } = useContext(Context)
   const [loading, setLoading] = useState(true)
   const [items, setItems] = useState([])
   const handleClickDeleteItem = async (id) => {
@@ -41,7 +41,7 @@ const ListItems = observer(() => {
               {items[0] ? Object.keys(items[0]).map((head, i) => {
                 if (i < 3 && i > 0) return <th>{head}</th>
               }) : false}
-              <th>Удалить элемент</th>
+              {!props.isView || user.isAuth ? user.roles.includes("ADMIN") ? <th>Удалить элемент</th> : false : false}
               <th>Страница элемента</th>
             </tr>
           </thead>
@@ -51,12 +51,13 @@ const ListItems = observer(() => {
                 {Object.values(e).map(((val, i) => {
                   if (i < 3 && i > 0)
                     return <td>{val.toString()}</td>
-                }))}<td>
+                }))}
+                {!props.isView || user.isAuth ? user.roles.includes("ADMIN") ? <td>
                   <ButtonGroup>
                     <Button onClick={() => handleClickDeleteItem(e._id)} variant="danger">Удалить</Button>
                     <Button onClick={() => handleClickEditMode(e._id)} variant="dark">Редактировать</Button>
                   </ButtonGroup>
-                </td>
+                </td> : false : false}
                 <td>
                   <Button onClick={() => localStorage.setItem('itemStore', JSON.stringify(e))}>
                     <NavLink className="text-light text-decoration-none" to={ITEM_ROUTE}>Перейти</NavLink>
