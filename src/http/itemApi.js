@@ -15,8 +15,9 @@ export const getItemsByCollection = async (id) => {
 export const deleteItem = async (id) => {
   await axios.put(`${API_URL}/api/item/delete`, { id })
 }
-export const editItem = async (id, name, tags) => {
-  await axios.put(`${API_URL}/api/item/edit`, { id, name, tags })
+export const editItem = async (id, name, tags, additionalFields) => {
+  const res = await axios.put(`${API_URL}/api/item/edit`, { id, name, tags, additionalFields })
+  return res.data
 }
 export const getItem = async (id) => {
   const res = await axios.post(`${API_URL}/api/item/get`, { id })
