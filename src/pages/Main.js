@@ -12,13 +12,9 @@ const Main = observer(() => {
   const handleClickNormalUser = async (id) => {
     await getUserByCollection(id).then((data) => {
       localStorage.setItem('viewUser', JSON.stringify(data))
-      user.setIsView(true)
       history(USER_ROUTE)
     })
   }
-  useEffect(() => {
-    user.setIsView(false)
-  }, [])
   return (
     <div className="p-3">
       <h2>Главная страница</h2>
