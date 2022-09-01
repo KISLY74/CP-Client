@@ -9,10 +9,11 @@ import { observer } from "mobx-react-lite"
 const NavBar = observer(() => {
   const { user } = useContext(Context)
   const location = useLocation()
+  const route = location.pathname
   const history = useNavigate()
   const logOut = () => {
     user.setIsAuth(false)
-    user.setIsView(false)
+    localStorage.setItem('isView', false)
     localStorage.clear()
     history(LOGIN_ROUTE)
   }
@@ -21,8 +22,11 @@ const NavBar = observer(() => {
   }, [])
   return (
     <Navbar className="d-flex justify-content-between" style={{ paddingLeft: 15, paddingRight: 15 }
-    } bg="dark" variant="dark" >
-      <h4 className="text-white">{user.isAuth ? user.username : "Гость"} {user.isView && location.pathname !== OWN_PAGE_ROUTE ? `(${JSON.parse(localStorage.getItem('viewUser')).username})` : ""}</h4>
+    } bg="dark" variant="dark">
+      <h4 className="text-white" id="username">
+        {user.isAuth ? user.username : "Гость"}
+        {localStorage.getItem('isView') && route !== MAIN_ROUTE && route !== SEARCH_RESULTS_ROUTE && route !== OWN_PAGE_ROUTE ? `(${JSON.parse(localStorage.getItem('viewUser')).username})` : ""}
+      </h4>
       <Nav>
         <NavLink className="nav-link" to={MAIN_ROUTE}>Главная</NavLink>
         <NavLink className="nav-link" to={SEARCH_RESULTS_ROUTE}>Результаты поиска</NavLink>
