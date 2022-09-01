@@ -25,7 +25,10 @@ const App = observer(() => {
     getItemsAndSetToStore()
     check().then(() => {
       user.setIsAuth(true)
-    }).catch(() => user.setIsAuth(false)).finally(() => setLoading(false))
+    }).catch(() => {
+      localStorage.setItem('username', "Гость")
+      user.setIsAuth(false)
+    }).finally(() => setLoading(false))
   }, [])
   if (loading) {
     return <Spinner className="position-absolute top-50 start-50" animation="border" />
