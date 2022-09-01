@@ -5,14 +5,10 @@ export default class UserStore {
     this._isAuth = false
     this._isBlock = false
     this._user = {}
-    this._isView = false
     makeAutoObservable(this)
   }
   setIsAuth(bool) {
     this._isAuth = bool
-  }
-  setIsView(bool) {
-    this._isView = bool
   }
   setUser(user) {
     this._user = user
@@ -22,9 +18,6 @@ export default class UserStore {
   }
   get isAuth() {
     return this._isAuth
-  }
-  get isView() {
-    return this._isView
   }
   get user() {
     return this._user
