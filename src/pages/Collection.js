@@ -15,8 +15,8 @@ const Collection = observer(() => {
         {user.isAuth || user.roles.includes("ADMIN") ? <ItemControlPanel /> : false}
         {item.isLoad ? <ListItems isView={false} /> : false}
       </div> : <div>
-        {user.isAuth && user.roles.includes("ADMIN") ? <ItemControlPanel /> : false}
-        {item.isLoad ? user.roles.includes("ADMIN") ? <ListItems isView={true} isAdmin={true} /> : <ListItems isView={true} isAdmin={false} /> : false}
+        {!user.isAuth ? false : user.roles.includes("ADMIN") ? <ItemControlPanel /> : false}
+        {item.isLoad ? !user.isAuth ? <ListItems isView={true} isAdmin={false} /> : user.roles.includes("ADMIN") ? <ListItems isView={true} isAdmin={true} /> : <ListItems isView={true} isAdmin={false} /> : false}
       </div>}
     </div >
   )
