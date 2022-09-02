@@ -25,7 +25,7 @@ const NavBar = observer(() => {
     } bg="dark" variant="dark">
       <h4 className="text-white" id="username">
         {user.isAuth ? user.username : "Гость"}
-        {localStorage.getItem('isView') && route !== MAIN_ROUTE && route !== SEARCH_RESULTS_ROUTE && route !== OWN_PAGE_ROUTE ? `(${JSON.parse(localStorage.getItem('viewUser')).username})` : ""}
+        {localStorage.getItem('isView') === "true" && route !== MAIN_ROUTE && route !== SEARCH_RESULTS_ROUTE && route !== OWN_PAGE_ROUTE && route !== ADMIN_ROUTE ? `(${JSON.parse(localStorage.getItem('viewUser')).username})` : ""}
       </h4>
       <Nav>
         <NavLink className="nav-link" to={MAIN_ROUTE}>Главная</NavLink>
