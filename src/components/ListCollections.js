@@ -63,7 +63,7 @@ const ListCollection = observer((props) => {
                 <Badge bg="success" onClick={() => {
                   localStorage.setItem('collectionStore', JSON.stringify(e))
                   history(COLLECTION_ROUTE)
-                  localStorage.setItem('isView', true)
+                  props.isOwn ? localStorage.setItem('isView', false) : localStorage.setItem('isView', true)
                 }} style={{ cursor: "pointer" }}>{e.name}</Badge>
               </h4>
             </Card.Title>

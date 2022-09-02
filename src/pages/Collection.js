@@ -11,12 +11,12 @@ const Collection = observer(() => {
   }, [])
   return (
     <div>
-      {!localStorage.getItem("isView") ? <div>
-        {user.isAuth ? user.roles.includes("ADMIN") ? <ItemControlPanel /> : false : false}
+      {localStorage.getItem("isView") === "false" ? <div>
+        {user.isAuth || user.roles.includes("ADMIN") ? <ItemControlPanel /> : false}
         {item.isLoad ? <ListItems isView={false} /> : false}
       </div> : <div>
-        {user.isAuth ? user.roles.includes("ADMIN") ? <ItemControlPanel /> : false : false}
-        {item.isLoad ? <ListItems isView={true} /> : false}
+        {user.isAuth && user.roles.includes("ADMIN") ? <ItemControlPanel /> : false}
+        {item.isLoad ? user.roles.includes("ADMIN") ? <ListItems isView={true} isAdmin={true} /> : <ListItems isView={true} isAdmin={false} /> : false}
       </div>}
     </div >
   )

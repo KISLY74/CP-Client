@@ -41,7 +41,7 @@ const ListItems = observer((props) => {
               {items[0] ? Object.keys(items[0]).map((head, i) => {
                 if (i < 3 && i > 0) return <th>{head}</th>
               }) : false}
-              {!props.isView || user.isAuth ? user.roles.includes("ADMIN") ? <th>Удалить элемент</th> : false : false}
+              {props.isAdmin ? <th>Удалить/Редактировать элемент</th> : !props.isView ? <th>Удалить/Редактировать элемент</th> : false}
               <th>Страница элемента</th>
             </tr>
           </thead>
@@ -52,12 +52,15 @@ const ListItems = observer((props) => {
                   if (i < 3 && i > 0)
                     return <td>{val.toString()}</td>
                 }))}
-                {!props.isView || user.isAuth ? user.roles.includes("ADMIN") ? <td>
+                {props.isAdmin ? <td>
                   <ButtonGroup>
                     <Button onClick={() => handleClickDeleteItem(e._id)} variant="danger">Удалить</Button>
                     <Button onClick={() => handleClickEditMode(e._id)} variant="dark">Редактировать</Button>
                   </ButtonGroup>
-                </td> : false : false}
+                </td> : !props.isView ? <ButtonGroup>
+                  <Button onClick={() => handleClickDeleteItem(e._id)} variant="danger">Удалить</Button>
+                  <Button onClick={() => handleClickEditMode(e._id)} variant="dark">Редактировать</Button>
+                </ButtonGroup> : false}
                 <td>
                   <Button onClick={() => localStorage.setItem('itemStore', JSON.stringify(e))}>
                     <NavLink className="text-light text-decoration-none" to={ITEM_ROUTE}>Перейти</NavLink>
