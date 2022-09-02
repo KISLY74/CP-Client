@@ -11,6 +11,7 @@ const Main = observer(() => {
   const history = useNavigate()
   const handleClickNormalUser = async (id) => {
     await getUserByCollection(id).then((data) => {
+      localStorage.setItem('isView', true)
       localStorage.setItem('viewUser', JSON.stringify(data))
       history(USER_ROUTE)
     })
