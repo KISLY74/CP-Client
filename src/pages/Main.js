@@ -5,9 +5,13 @@ import { observer } from "mobx-react-lite"
 import { Context } from "../index"
 import { useNavigate } from "react-router-dom"
 import { getUserByCollection } from "../http/userApi"
+import { getCollections } from "../http/collectionApi"
+import { getUsers } from "../http/userApi"
 
 const Main = observer(() => {
   const { collection, item, user } = useContext(Context)
+  const [collections, setCollections] = useState([])
+  const [users, setUsers] = useState([])
   const history = useNavigate()
   const handleClickNormalUser = async (id) => {
     await getUserByCollection(id).then((data) => {
@@ -16,13 +20,32 @@ const Main = observer(() => {
       history(USER_ROUTE)
     })
   }
+  const getStateCollections = async () => {
+    await getCollections().then((data) => setCollections(data))
+  }
+  const getStateUsers = async () => {
+    await getUsers().then((res) => setUsers(res.data))
+  }
+  useEffect(() => {
+    getStateCollections()
+    getStateUsers()
+  }, [])
   return (
     <div className="p-3">
       <h2>Главная страница</h2>
-      <h4>Топ 5 самых больших коллекций</h4>
+      <h4>
+        Топ 5 самых больших <Badge bg="success">коллекций</Badge>
+      </h4>
       <div className="d-flex" style={{ columnGap: 25, flexWrap: "wrap" }}>
         {collection.biggest.map((e) => <Card key={e._id} className="mb-4" style={{ minWidth: 300, maxWidth: 300 }} >
-          <Card.Body style={{ backgroundColor: '#222' }}>
+          <Card.Body className="rounded-top" style={{ backgroundColor: '#222' }}>
+            {users.map(user => {
+              if (user.collections.includes(e._id)) {
+                return <h5>
+                  <Badge className="position-absolute top-0 end-0" bg="secondary" style={{ cursor: "pointer" }} onClick={() => handleClickNormalUser(e._id)}> {user.username}</Badge>
+                </h5>
+              }
+            })}
             <Card.Title >
               <h4>
                 <Badge bg="success">{e.name}</Badge>
@@ -32,16 +55,34 @@ const Main = observer(() => {
           <ListGroup>
             <ListGroup.Item>Описание: {e.description}</ListGroup.Item>
             <ListGroup.Item>Тема: {e.theme}</ListGroup.Item>
-            <Button variant="secondary" onClick={() => handleClickNormalUser(e._id)}>Перейти к пользователю</Button>
           </ListGroup>
         </Card>)}
       </div>
-      <h4>Список последних добавленных элементов</h4>
+      <h4>
+        Список последних добавленных <Badge>элементов</Badge>
+      </h4>
       <div className="d-flex" style={{ columnGap: 25, flexWrap: "wrap" }}>
         {item.lastAdditionItems.map((e) => <Card key={e._id} className="mb-4" style={{ minWidth: 300, maxWidth: 300 }} >
-          <Card.Body>
+          <Card.Body className="rounded-top" style={{ backgroundColor: '#222' }}>
+            {collections.map(collection => {
+              if (collection.items.includes(e._id))
+                return users.map(user => {
+                  if (user.collections.includes(collection._id)) {
+                    return <h5>
+                      <Badge className="position-absolute top-0 end-0" bg="secondary" style={{ cursor: "pointer" }} onClick={() => handleClickNormalUser(collection._id)}> {user.username}</Badge>
+                    </h5>
+                  }
+                })
+            })
+            }
             <Card.Title>
-              {e.name}
+              <h4>
+                <Badge>{e.name}</Badge>
+              </h4>
+              {collections.map(collection => {
+                if (collection.items.includes(e._id))
+                  return <Badge bg="success">{collection.name}</Badge>
+              })}
             </Card.Title>
           </Card.Body>
           <ListGroup>
