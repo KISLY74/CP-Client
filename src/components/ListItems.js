@@ -16,9 +16,7 @@ const ListItems = observer((props) => {
   }
   const updateItemsCollection = async () => {
     setLoading(false)
-    await getItemsByCollection(collection.id).then(async (data) => {
-      setItems(data)
-    }).finally(() => setLoading(true))
+    await getItemsByCollection(JSON.parse(localStorage.getItem('collectionStore'))._id).then(async (data) => setItems(data)).finally(() => setLoading(true))
   }
   const handleClickEditMode = async (id) => {
     item.setEditMode(true)
