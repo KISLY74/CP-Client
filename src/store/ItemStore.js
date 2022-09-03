@@ -7,6 +7,7 @@ export default class ItemStore {
     this._editMode = false
     this._fields = {}
     this._lastAdditionItems = []
+    this._commentsLoad = false
     makeAutoObservable(this)
   }
   setItem(item) {
@@ -14,6 +15,9 @@ export default class ItemStore {
   }
   setIsLoad(bool) {
     this._isLoad = bool
+  }
+  setCommentsLoad(bool) {
+    this._commentsLoad = bool
   }
   setEditMode(bool) {
     this._editMode = bool
@@ -26,6 +30,9 @@ export default class ItemStore {
   }
   get item() {
     return this._item
+  }
+  get commentsLoad() {
+    return this._commentsLoad
   }
   get isLoad() {
     return this._isLoad
