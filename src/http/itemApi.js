@@ -23,3 +23,23 @@ export const getItem = async (id) => {
   const res = await axios.post(`${API_URL}/api/item/get`, { id })
   return res.data
 }
+export const addComment = async (id, comment) => {
+  const res = await axios.put(`${API_URL}/api/item/add/comment`, { id, comment })
+  return res.data
+}
+export const getComments = async (id) => {
+  const res = await axios.post(`${API_URL}/api/item/get/comments`, { id })
+  return res.data
+}
+export const openAccess = async (id) => {
+  const res = await axios.post(`${API_URL}/api/item/access/open`, { id })
+  return res.data
+}
+export const closeAccess = async (id) => {
+  const res = await axios.post(`${API_URL}/api/item/access/close`, { id })
+  return res.data
+}
+export const getDataAccess = async (id) => {
+  const res = await axios.post(`${API_URL}/api/item/access/get`, { id })
+  return res.data
+}
