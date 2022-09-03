@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react"
-import { ListGroup, Card, Button, Badge } from "react-bootstrap"
+import { ListGroup, Card, Badge, Image, Row, Col } from "react-bootstrap"
 import { USER_ROUTE } from "../utils/routes"
 import { observer } from "mobx-react-lite"
 import { Context } from "../index"
@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom"
 import { getUserByCollection } from "../http/userApi"
 import { getCollections } from "../http/collectionApi"
 import { getUsers } from "../http/userApi"
+import ListComments from "../components/ListComments"
+import CommentForm from "../components/CommentForm"
 
 const Main = observer(() => {
   const { collection, item, user } = useContext(Context)
@@ -63,7 +65,7 @@ const Main = observer(() => {
       </h4>
       <div className="d-flex" style={{ columnGap: 25, flexWrap: "wrap" }}>
         {item.lastAdditionItems.map((e) => <Card key={e._id} className="mb-4" style={{ minWidth: 300, maxWidth: 300 }} >
-          <Card.Body className="rounded-top" style={{ backgroundColor: '#222' }}>
+          <Card.Body className="rounded-top" style={{ backgroundColor: '#222', maxHeight: 350 }}>
             {collections.map(collection => {
               if (collection.items.includes(e._id))
                 return users.map(user => {
@@ -81,7 +83,19 @@ const Main = observer(() => {
               </h4>
               {collections.map(collection => {
                 if (collection.items.includes(e._id))
-                  return <Badge bg="success">{collection.name}</Badge>
+                  return <div>
+                    <Row className="d-flex justify-content-between">
+                      <Col>
+                        <Badge bg="success">{collection.name}</Badge>
+                      </Col>
+                    </Row>
+                    {localStorage.getItem('username') === "Гость" ? false : <Row className="mt-2">
+                      <Col className="d-flex align-items-center justify-content-between" style={{ flexWrap: "wrap" }}>
+                        <ListComments itemId={e._id} />
+                        <CommentForm itemId={e._id} />
+                      </Col>
+                    </Row>}
+                  </div>
               })}
             </Card.Title>
           </Card.Body>
