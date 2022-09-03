@@ -39,7 +39,7 @@ const ListComments = observer((props) => {
           </Button>
           {item.commentsLoad ?
             <div>
-              {isShow ? <div style={{ maxHeight: 100, overflow: "scroll", overflowX: "hidden" }}>
+              {isShow ? <div style={{ maxHeight: 150, overflow: "scroll", overflowX: "hidden" }}>
                 {loading ? comments ? comments.map((e) => {
                   return <div className="text-light border p-3 mt-2">
                     <h6><Badge>Автор:</Badge> {e.author}</h6>
