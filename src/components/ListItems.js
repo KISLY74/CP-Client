@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom"
 import { observer } from "mobx-react-lite"
 import { useContext, useEffect, useState } from "react"
 import { Context } from "../index"
-import { deleteItem, getItemsByCollection } from "../http/itemApi"
+import { closeAccess, deleteItem, getItemsByCollection, openAccess } from "../http/itemApi"
 
 const ListItems = observer((props) => {
   const { collection, item, user } = useContext(Context)
@@ -26,6 +26,25 @@ const ListItems = observer((props) => {
       }
     })
   }
+  const getDeleteEditGroup = (e) => {
+    return <ButtonGroup>
+      <Button onClick={() => handleClickDeleteItem(e._id)} variant="danger">Удалить</Button>
+      <Button onClick={() => handleClickEditMode(e._id)} variant="dark">Редактировать</Button>
+    </ButtonGroup>
+  }
+  const getOpenCloseGroup = (e) => {
+    return <ButtonGroup>
+      {!e.isAccess ? <Button onClick={() => handleClickOpenAccess(e._id)} variant="success">Открыть</Button> : <Button onClick={() => handleClickCloseAccess(e._id)} variant="danger">Закрыть</Button>}
+    </ButtonGroup>
+  }
+  const handleClickOpenAccess = async (id) => {
+    await openAccess(id)
+    updateItemsCollection()
+  }
+  const handleClickCloseAccess = async (id) => {
+    await closeAccess(id)
+    updateItemsCollection()
+  }
   useEffect(() => {
     updateItemsCollection()
   }, [])
@@ -40,6 +59,7 @@ const ListItems = observer((props) => {
                 if (i < 3 && i > 0) return <th>{head}</th>
               }) : false}
               {props.isAdmin ? <th>Удалить/Редактировать элемент</th> : !props.isView ? <th>Удалить/Редактировать элемент</th> : false}
+              {props.isAdmin ? <th>Доступ для просмотра</th> : !props.isView ? <th>Доступ для просмотра</th> : false}
               <th>Страница элемента</th>
             </tr>
           </thead>
@@ -50,15 +70,8 @@ const ListItems = observer((props) => {
                   if (i < 3 && i > 0)
                     return <td>{val.toString()}</td>
                 }))}
-                {props.isAdmin ? <td>
-                  <ButtonGroup>
-                    <Button onClick={() => handleClickDeleteItem(e._id)} variant="danger">Удалить</Button>
-                    <Button onClick={() => handleClickEditMode(e._id)} variant="dark">Редактировать</Button>
-                  </ButtonGroup>
-                </td> : !props.isView ? <ButtonGroup>
-                  <Button onClick={() => handleClickDeleteItem(e._id)} variant="danger">Удалить</Button>
-                  <Button onClick={() => handleClickEditMode(e._id)} variant="dark">Редактировать</Button>
-                </ButtonGroup> : false}
+                {props.isAdmin ? <td>{getDeleteEditGroup(e)}</td> : !props.isView ? <td>{getDeleteEditGroup(e)}</td> : false}
+                {props.isAdmin ? <td>{getOpenCloseGroup(e)}</td> : !props.isView ? <td>{getOpenCloseGroup(e)}</td> : false}
                 <td>
                   <Button onClick={() => localStorage.setItem('itemStore', JSON.stringify(e))}>
                     <NavLink className="text-light text-decoration-none" to={ITEM_ROUTE}>Перейти</NavLink>
