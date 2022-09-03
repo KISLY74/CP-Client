@@ -1,8 +1,9 @@
 import { observer } from "mobx-react-lite"
 import { useState, useEffect, useContext } from "react"
-import { Form, FormGroup, Button, Spinner, Card, ListGroup } from "react-bootstrap"
+import { Form, FormGroup, Button, Spinner, Card, ListGroup, Badge, Col, Row } from "react-bootstrap"
 import { Context } from "../index"
 import { getItems } from "../http/itemApi"
+import CardItem from "../components/CardItem"
 
 const SearchResults = observer(() => {
   const { user } = useContext(Context)
@@ -33,16 +34,7 @@ const SearchResults = observer(() => {
       <div className="mt-2">
         <h3>Результаты поиска</h3>
         <div className="d-flex" style={{ flexWrap: "wrap", columnGap: 20 }}>
-          {loading ? itemsByTag.map((e, i) => <Card className="mb-4" style={{ minWidth: 300, maxWidth: 300 }} key={i}>
-            <Card.Body>
-              <Card.Title>
-                {e.name}
-              </Card.Title>
-            </Card.Body>
-            <ListGroup>
-              <ListGroup.Item>Теги: {e.tags.toString()}</ListGroup.Item>
-            </ListGroup>
-          </Card>) : <Spinner className="position-absolute top-50 start-50" animation="border" />}
+          {loading ? itemsByTag.map((e, i) => <CardItem item={e} allFields={false} />) : <Spinner className="position-absolute top-50 start-50" animation="border" />}
         </div>
       </div>
     </div>
