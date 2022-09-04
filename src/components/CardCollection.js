@@ -63,6 +63,11 @@ const CardCollection = observer((props) => {
       }
     })
   }
+  const handleClickCollection = () => {
+    localStorage.setItem('collectionStore', JSON.stringify(props.collection))
+    props.isOwn ? localStorage.setItem('isView', false) : localStorage.setItem('isView', true)
+    history(COLLECTION_ROUTE)
+  }
   const handleClickNormalUser = async (id) => {
     await getUserByCollection(id).then((data) => {
       localStorage.setItem('isView', true)
@@ -85,11 +90,7 @@ const CardCollection = observer((props) => {
       <Card.Title >
         <h4>
           {!props.isMain ?
-            <Badge bg="success" onClick={() => {
-              localStorage.setItem('collectionStore', JSON.stringify(props.collection))
-              props.isOwn ? localStorage.setItem('isView', false) : localStorage.setItem('isView', true)
-              history(COLLECTION_ROUTE)
-            }} style={{ cursor: "pointer" }}>{props.collection.name}</Badge>
+            <Badge bg="success" onClick={() => handleClickCollection()} style={{ cursor: "pointer" }}>{props.collection.name}</Badge>
             : <Badge bg="success">{props.collection.name}</Badge>}
         </h4>
       </Card.Title>
