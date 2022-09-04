@@ -24,7 +24,7 @@ const NavBar = observer(() => {
     <Navbar className="d-flex justify-content-between" style={{ paddingLeft: 15, paddingRight: 15 }
     } bg="dark" variant="dark">
       <h4 className="text-white" id="username">
-        {user.isAuth ? user.username : "Гость"}
+        {user.isAuth ? localStorage.getItem('username') : "Гость"}
         {localStorage.getItem('isView') === "true" && route !== MAIN_ROUTE && route !== SEARCH_RESULTS_ROUTE && route !== OWN_PAGE_ROUTE && route !== ADMIN_ROUTE ? `(${JSON.parse(localStorage.getItem('viewUser')).username})` : ""}
       </h4>
       <Nav>
