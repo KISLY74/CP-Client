@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { Card, Badge, Button, ListGroup } from "react-bootstrap"
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import { COLLECTION_ROUTE, OWN_PAGE_ROUTE, USER_ROUTE, MAIN_ROUTE } from "../utils/routes"
 import { observer } from 'mobx-react-lite'
 import { Context } from '../index'
@@ -11,6 +11,7 @@ import { getUsers, getUserByCollection } from '../http/userApi'
 const CardCollection = observer((props) => {
   const { user, collection } = useContext(Context)
   const history = useNavigate()
+  const location = useLocation()
   const [collections, setCollections] = useState([])
   const [users, setUsers] = useState([])
   const getStateUsers = async () => {
@@ -28,11 +29,11 @@ const CardCollection = observer((props) => {
     if (props.isOwn) {
       updateCollectionsUser()
     } else {
-      if (localStorage.getItem('isView')) {
+      if (localStorage.getItem('isView') === "true") {
         updateCollectionViewUser()
       } else {
         localStorage.setItem('isView', false)
-        user.isAuth ? history(OWN_PAGE_ROUTE) : history(MAIN_ROUTE)
+        if (!user.isAuth) history(MAIN_ROUTE)
       }
     }
   }
@@ -75,18 +76,20 @@ const CardCollection = observer((props) => {
       })}
       <Card.Title >
         <h4>
-          <Badge bg="success" onClick={() => {
-            localStorage.setItem('collectionStore', JSON.stringify(props.collection))
-            history(COLLECTION_ROUTE)
-            props.isOwn ? localStorage.setItem('isView', false) : localStorage.setItem('isView', true)
-          }} style={{ cursor: "pointer" }}>{props.collection.name}</Badge>
+          {!props.isMain ?
+            <Badge bg="success" onClick={() => {
+              localStorage.setItem('collectionStore', JSON.stringify(props.collection))
+              props.isOwn ? localStorage.setItem('isView', false) : localStorage.setItem('isView', true)
+              history(COLLECTION_ROUTE)
+            }} style={{ cursor: "pointer" }}>{props.collection.name}</Badge>
+            : <Badge bg="success">{props.collection.name}</Badge>}
         </h4>
       </Card.Title>
     </Card.Body>
     <ListGroup>
       <ListGroup.Item>Описание: <ReactMarkdown>{props.collection.description}</ReactMarkdown></ListGroup.Item>
       <ListGroup.Item>Тема: {props.collection.theme}</ListGroup.Item>
-      {props.isOwn ? groupDeleteEdit() : !user.isAuth ? user.setUser({ username: "Гость", roles: ["USER"] }) : user.roles.includes("ADMIN") ? groupDeleteEdit() : false}
+      {!props.isMain ? props.isOwn ? groupDeleteEdit() : !user.isAuth ? user.setUser({ username: "Гость", roles: ["USER"] }) : user.roles.includes("ADMIN") ? groupDeleteEdit() : false : false}
     </ListGroup>
   </Card>
 })
