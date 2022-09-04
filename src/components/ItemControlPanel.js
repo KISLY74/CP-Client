@@ -2,7 +2,7 @@ import { observer } from "mobx-react-lite"
 import { Form, Button, ButtonGroup } from "react-bootstrap"
 import { Context } from "../index"
 import { useContext, useEffect, useState } from "react"
-import { addAdditionalFields, getAdditionalFields } from "../http/collectionApi"
+import { addAdditionalFields, getAdditionalFields, getCollections } from "../http/collectionApi"
 import { createItem, editItem, getItems } from "../http/itemApi"
 
 const ItemControlPanel = observer(() => {
@@ -20,6 +20,11 @@ const ItemControlPanel = observer(() => {
     await getAdditionalFields(collection.id).then((data) => {
       collection.setAdditionalFields([data.stringsFields, data.numbersFields, data.booleansFields, data.datesFields, data.textsFields])
     }).finally(() => setShowFields(true))
+  }
+  const getCollectionsAndSetToStore = async () => {
+    await getCollections().then((data) => {
+      collection.setBiggest(data.sort((a, b) => b.items.length - a.items.length).slice(0, 5))
+    })
   }
   const handleClickAddFields = async () => {
     let controls = document.querySelectorAll(".controls")
@@ -47,6 +52,7 @@ const ItemControlPanel = observer(() => {
       await createItem(name, tags.split(','), collection.id, getAdditionalFieldsByForm()).finally(() => {
         item.setIsLoad(true)
         getItemsAndSetToStore()
+        getCollectionsAndSetToStore()
       })
       setIsShow(false)
       clearFormCollection()
@@ -62,6 +68,7 @@ const ItemControlPanel = observer(() => {
       item.setIsLoad(true)
       handleClickCancel()
       getItemsAndSetToStore()
+      getCollectionsAndSetToStore()
     })
   }
   const getAdditionalFieldsByForm = () => {

@@ -5,7 +5,7 @@ import { observer } from "mobx-react-lite"
 import { useContext, useEffect, useState } from "react"
 import { Context } from "../index"
 import { closeAccess, deleteItem, getItemsByCollection, openAccess, getItems } from "../http/itemApi"
-import { changeItemsInCollection } from "../http/collectionApi"
+import { changeItemsInCollection, getCollections } from "../http/collectionApi"
 
 const ListItems = observer((props) => {
   const { collection, item, user } = useContext(Context)
@@ -18,11 +18,17 @@ const ListItems = observer((props) => {
   const getItemsAndSetToStore = async () => {
     await getItems().then((data) => item.setLastAdditionItems(data.sort((a, b) => new Date(b.dateAddition) - new Date(a.dateAddition)).slice(0, 5)))
   }
+  const getCollectionsAndSetToStore = async () => {
+    await getCollections().then((data) => {
+      collection.setBiggest(data.sort((a, b) => b.items.length - a.items.length).slice(0, 5))
+    })
+  }
   const handleClickDeleteItem = async (id) => {
     await deleteItem(id)
     await changeItemsInCollection(collection.id)
     updateItemsCollection()
     getItemsAndSetToStore()
+    getCollectionsAndSetToStore()
   }
   const updateItemsCollection = async () => {
     setLoading(false)
