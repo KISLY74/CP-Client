@@ -42,13 +42,15 @@ const ItemControlPanel = observer(() => {
     await getItems().then((data) => item.setLastAdditionItems(data.sort((a, b) => new Date(b.dateAddition) - new Date(a.dateAddition)).slice(0, 5)))
   }
   const handleClickCreateItem = async () => {
-    item.setIsLoad(false)
-    await createItem(name, tags.split(','), collection.id, getAdditionalFieldsByForm()).finally(() => {
-      item.setIsLoad(true)
-      getItemsAndSetToStore()
-    })
-    setIsShow(false)
-    clearFormCollection()
+    if (getAdditionalFieldsByForm() !== null) {
+      item.setIsLoad(false)
+      await createItem(name, tags.split(','), collection.id, getAdditionalFieldsByForm()).finally(() => {
+        item.setIsLoad(true)
+        getItemsAndSetToStore()
+      })
+      setIsShow(false)
+      clearFormCollection()
+    }
   }
   const handleClickCancel = async () => {
     item.setEditMode(false)
@@ -71,6 +73,7 @@ const ItemControlPanel = observer(() => {
         } else {
           if (fields[i][j].value === '') {
             alert("Запоните пустые поля")
+            return null
           } else {
             additionalFields[i][names[i][j].textContent] = fields[i][j].value
           }
