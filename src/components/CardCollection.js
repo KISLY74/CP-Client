@@ -89,7 +89,7 @@ const CardCollection = observer((props) => {
     <ListGroup>
       <ListGroup.Item>Описание: <ReactMarkdown>{props.collection.description}</ReactMarkdown></ListGroup.Item>
       <ListGroup.Item>Тема: {props.collection.theme}</ListGroup.Item>
-      {!props.isMain ? props.isOwn ? groupDeleteEdit() : !user.isAuth ? user.setUser({ username: "Гость", roles: ["USER"] }) : user.roles.includes("ADMIN") ? groupDeleteEdit() : false : false}
+      {!props.isMain ? props.isOwn ? groupDeleteEdit() : !user.isAuth ? false : user.roles.includes("ADMIN") ? groupDeleteEdit() : false : false}
     </ListGroup>
   </Card>
 })
