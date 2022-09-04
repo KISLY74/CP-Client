@@ -62,7 +62,7 @@ const ListItems = observer((props) => {
             <thead>
               <tr>
                 {items[0] ? Object.keys(items[0]).map((head, i) => {
-                  if (i < 3 && i > 0) return <th>{head}</th>
+                  if (typeof Object.values(items[0])[i] === "string" && head !== "_id") return <th>{head}</th>
                 }) : false}
                 {props.isAdmin ? <th>Удалить/Редактировать элемент</th> : !props.isView ? <th>Удалить/Редактировать элемент</th> : false}
                 {props.isAdmin ? <th>Доступ для просмотра</th> : !props.isView ? <th>Доступ для просмотра</th> : false}
@@ -73,7 +73,7 @@ const ListItems = observer((props) => {
               {items.map(e => {
                 return <tr>
                   {Object.values(e).map(((val, i) => {
-                    if (i < 3 && i > 0)
+                    if (typeof val === "string" && Object.keys(items[0])[i] !== "_id")
                       return <td>{val.toString()}</td>
                   }))}
                   {props.isAdmin ? <td>{getDeleteEditGroup(e)}</td> : !props.isView ? <td>{getDeleteEditGroup(e)}</td> : false}
