@@ -71,7 +71,7 @@ const ListCollection = observer((props) => {
           <ListGroup>
             <ListGroup.Item>Описание: {e.description}</ListGroup.Item>
             <ListGroup.Item>Тема: {e.theme}</ListGroup.Item>
-            {props.isOwn || user.roles.includes("ADMIN") ?
+            {props.isOwn || !user.isAuth ? user.setUser({ username: "Гость", roles: ["USER"] }) : user.roles.includes("ADMIN") ?
               <ListGroup.Item className="d-flex justify-content-between">
                 <Button onClick={() => handleClickDeleteCollection(e._id)} variant="danger">Удалить</Button>
                 <Button variant="secondary" onClick={() => handleClickEditMode(e._id)}>Редактировать</Button>
