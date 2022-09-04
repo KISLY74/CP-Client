@@ -11,21 +11,21 @@ const ItemControlPanel = observer(() => {
   const [showFields, setShowFields] = useState(false)
   const [name, setName] = useState('')
   const [tags, setTags] = useState('')
-  const titles = ["Строки", "Числа", "Логические (Да/Нет)", "Даты"]
-  const classesLabels = ["names-strings", "names-numbers", "names-booleans", "names-dates"]
-  const classesValues = ["strings", "numbers", "booleans", "dates"]
+  const titles = ["Строки", "Числа", "Логические (Да/Нет)", "Даты", "Многострочный текст"]
+  const classesLabels = ["names-strings", "names-numbers", "names-booleans", "names-dates", "names-texts"]
+  const classesValues = ["strings", "numbers", "booleans", "dates", "texts"]
   let names = classesLabels.map(e => document.querySelectorAll(`.${e}`))
   let fields = classesValues.map(e => document.querySelectorAll(`.${e}`))
   const updateAdditionalFields = async () => {
     await getAdditionalFields(collection.id).then((data) => {
-      collection.setAdditionalFields([data.stringsFields, data.numbersFields, data.booleansFields, data.datesFields])
+      collection.setAdditionalFields([data.stringsFields, data.numbersFields, data.booleansFields, data.datesFields, data.textsFields])
     }).finally(() => setShowFields(true))
   }
   const handleClickAddFields = async () => {
     let controls = document.querySelectorAll(".controls")
     let names = []
     controls.forEach(e => names.push(e.value))
-    await addAdditionalFields(collection.id, names[0], names[1], names[2], names[3]).finally(() => {
+    await addAdditionalFields(collection.id, ...names).finally(() => {
       updateAdditionalFields()
     })
   }
@@ -56,7 +56,7 @@ const ItemControlPanel = observer(() => {
     })
   }
   const getAdditionalFieldsByForm = () => {
-    let additionalFields = [{}, {}, {}, {}]
+    let additionalFields = [{}, {}, {}, {}, {}]
     for (let i = 0; i < names.length; i++) {
       for (let j = 0; j < fields[i].length; j++) {
         if (i === 2) {
@@ -70,7 +70,6 @@ const ItemControlPanel = observer(() => {
     return additionalFields
   }
   useEffect(() => {
-    // item.setFields({ name: "", tags: "" })
     updateAdditionalFields()
   }, [])
   return <Form className="p-3 d-flex" style={{ maxWidth: 850, rowGap: 14, flexDirection: "column" }}>
@@ -89,7 +88,7 @@ const ItemControlPanel = observer(() => {
         if (field) {
           return <Form.Group key={`${field}${i}`}>
             <Form.Label className={classesLabels[ind]}>{field}</Form.Label>
-            {ind < 2 ? <Form.Control type="text" className={classesValues[ind]} placeholder={`Введите поле ${field}`}></Form.Control> : ind === 2 ? <Form.Check className="booleans" type="checkbox"></Form.Check> : ind === 3 ? <Form.Control className="dates" type="date"></Form.Control> : false}
+            {ind < 2 ? <Form.Control type="text" className={classesValues[ind]} placeholder={`Введите поле ${field}`}></Form.Control> : ind === 2 ? <Form.Check className="booleans" type="checkbox"></Form.Check> : ind === 3 ? <Form.Control className="dates" type="date"></Form.Control> : ind === 4 ? <Form.Control className="texts" as="textarea"></Form.Control> : false}
           </Form.Group>
         }
       })
