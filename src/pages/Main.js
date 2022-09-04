@@ -14,7 +14,7 @@ const Main = observer(() => {
         Топ 5 самых больших <Badge bg="success">коллекций</Badge>
       </h4>
       <div className="d-flex" style={{ columnGap: 25, flexWrap: "wrap" }}>
-        {collection.biggest.map((e) => <CardCollection collection={e} isOwn={false} />)}
+        {collection.biggest.map((e) => <CardCollection isMain={true} collection={e} isOwn={false} />)}
       </div>
       <h4>
         Список последних добавленных <Badge>элементов</Badge>
