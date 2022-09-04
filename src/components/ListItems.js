@@ -57,35 +57,38 @@ const ListItems = observer((props) => {
     <h4>Список элементов</h4>
     <div className="d-flex mt-4" style={{ columnGap: 20, flexWrap: "wrap" }}>
       {loading ?
-        <Table bordered hover>
-          <thead>
-            <tr>
-              {items[0] ? Object.keys(items[0]).map((head, i) => {
-                if (i < 3 && i > 0) return <th>{head}</th>
-              }) : false}
-              {props.isAdmin ? <th>Удалить/Редактировать элемент</th> : !props.isView ? <th>Удалить/Редактировать элемент</th> : false}
-              {props.isAdmin ? <th>Доступ для просмотра</th> : !props.isView ? <th>Доступ для просмотра</th> : false}
-              <th>Страница элемента</th>
-            </tr>
-          </thead>
-          <tbody>
-            {items.map(e => {
-              return <tr>
-                {Object.values(e).map(((val, i) => {
-                  if (i < 3 && i > 0)
-                    return <td>{val.toString()}</td>
-                }))}
-                {props.isAdmin ? <td>{getDeleteEditGroup(e)}</td> : !props.isView ? <td>{getDeleteEditGroup(e)}</td> : false}
-                {props.isAdmin ? <td>{getOpenCloseGroup(e)}</td> : !props.isView ? <td>{getOpenCloseGroup(e)}</td> : false}
-                <td>
-                  <Button onClick={() => localStorage.setItem('itemStore', JSON.stringify(e))}>
-                    <NavLink className="text-light text-decoration-none" to={ITEM_ROUTE}>Перейти</NavLink>
-                  </Button>
-                </td>
+        <div style={{ overflowY: "hidden", overflowX: "scroll" }}>
+          <Table bordered hover>
+            <thead>
+              <tr>
+                {items[0] ? Object.keys(items[0]).map((head, i) => {
+                  if (i < 3 && i > 0) return <th>{head}</th>
+                }) : false}
+                {props.isAdmin ? <th>Удалить/Редактировать элемент</th> : !props.isView ? <th>Удалить/Редактировать элемент</th> : false}
+                {props.isAdmin ? <th>Доступ для просмотра</th> : !props.isView ? <th>Доступ для просмотра</th> : false}
+                <th>Страница элемента</th>
               </tr>
-            })}
-          </tbody>
-        </Table> : <Spinner className="position-absolute top-50 start-50" animation="border" />}
+            </thead>
+            <tbody>
+              {items.map(e => {
+                return <tr>
+                  {Object.values(e).map(((val, i) => {
+                    if (i < 3 && i > 0)
+                      return <td>{val.toString()}</td>
+                  }))}
+                  {props.isAdmin ? <td>{getDeleteEditGroup(e)}</td> : !props.isView ? <td>{getDeleteEditGroup(e)}</td> : false}
+                  {props.isAdmin ? <td>{getOpenCloseGroup(e)}</td> : !props.isView ? <td>{getOpenCloseGroup(e)}</td> : false}
+                  <td>
+                    <Button onClick={() => localStorage.setItem('itemStore', JSON.stringify(e))}>
+                      <NavLink className="text-light text-decoration-none" to={ITEM_ROUTE}>Перейти</NavLink>
+                    </Button>
+                  </td>
+                </tr>
+              })}
+            </tbody>
+          </Table>
+        </div>
+        : <Spinner className="position-absolute top-50 start-50" animation="border" />}
     </div>
   </div >
 })

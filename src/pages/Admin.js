@@ -117,22 +117,24 @@ const Admin = observer(() => {
               Loading...
             </Button>}
           </ButtonGroup>
-          <Table bordered hover>
-            <thead>
-              <tr>
-                <th><Form.Check className="checkbox-all" onClick={() => handleClickCheckboxAll()} />Выделить/Снять всё</th>
-                {headers ? headers.map((e, i) => (i !== 2 && i !== 0 && i !== 6) ? <th key={e}>{`${e}`}</th> : "") : ""}
-                <th>Страница пользователя</th>
-              </tr>
-            </thead>
-            <tbody>
-              {usersValues ? usersValues.map((el, ind) => el ? <tr key={ind}><td><Form.Check onClick={() => handleClickCheckbox()} className="checkbox" key={ind} /></td>{el.map((e, i) => {
-                if (i !== 2 && i !== 0 && i !== 6) return <td key={i}>{`${e}`}</td>
-              })}<td><Button onClick={() => handleClickViewUser(el)}>
-                <NavLink className="text-light text-decoration-none" to={USER_ROUTE}>Перейти</NavLink>
-              </Button></td></tr> : '') : ''}
-            </tbody>
-          </Table >
+          <div style={{ overflowY: "hidden", overflowX: "scroll" }}>
+            <Table bordered hover>
+              <thead>
+                <tr>
+                  <th><Form.Check className="checkbox-all" onClick={() => handleClickCheckboxAll()} />Выделить/Снять всё</th>
+                  {headers ? headers.map((e, i) => (i !== 2 && i !== 0 && i !== 6) ? <th key={e}>{`${e}`}</th> : "") : ""}
+                  <th>Страница пользователя</th>
+                </tr>
+              </thead>
+              <tbody>
+                {usersValues ? usersValues.map((el, ind) => el ? <tr key={ind}><td><Form.Check onClick={() => handleClickCheckbox()} className="checkbox" key={ind} /></td>{el.map((e, i) => {
+                  if (i !== 2 && i !== 0 && i !== 6) return <td key={i}>{`${e}`}</td>
+                })}<td><Button onClick={() => handleClickViewUser(el)}>
+                  <NavLink className="text-light text-decoration-none" to={USER_ROUTE}>Перейти</NavLink>
+                </Button></td></tr> : '') : ''}
+              </tbody>
+            </Table >
+          </div>
           <ButtonGroup className="d-flex" aria-label="Basic example" onClick={(e) => handleClickAddRemove(e)}>
             <Button variant="outline-success" id={1}>Add to admins</Button>
             <Button variant="outline-danger" id={2}>Remove from admins</Button>
