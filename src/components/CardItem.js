@@ -7,8 +7,11 @@ import CommentForm from "../components/CommentForm"
 import { getUserByCollection, getUsers } from "../http/userApi"
 import { useNavigate } from "react-router-dom"
 import { USER_ROUTE } from "../utils/routes"
+import { observer } from "mobx-react-lite"
+import { Context } from ".."
 
-const CardItem = (props) => {
+const CardItem = observer((props) => {
+  const { item } = useContext(Context)
   const history = useNavigate()
   const [users, setUsers] = useState([])
   const [itemObj, setItemObj] = useState({})
@@ -35,7 +38,7 @@ const CardItem = (props) => {
     getStateUsers()
     getStateCollections()
     updateTableItem()
-  }, [])
+  }, [item.isLoad])
   return (<div>
     {loading ? <Card className="mb-4" style={{ minWidth: 300, maxWidth: 300 }}>
       <Card.Body className="rounded-top" style={{ backgroundColor: '#222', maxHeight: 500 }}>
@@ -82,6 +85,6 @@ const CardItem = (props) => {
         </ListGroup>}
     </Card> : <Spinner className="position-absolute top-50 start-50" animation="border" />}
   </div>)
-}
+})
 
 export default CardItem

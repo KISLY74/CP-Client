@@ -4,15 +4,19 @@ import { NavLink } from "react-router-dom"
 import { observer } from "mobx-react-lite"
 import { useContext, useEffect, useState } from "react"
 import { Context } from "../index"
-import { closeAccess, deleteItem, getItemsByCollection, openAccess } from "../http/itemApi"
+import { closeAccess, deleteItem, getItemsByCollection, openAccess, getItems } from "../http/itemApi"
 
 const ListItems = observer((props) => {
   const { collection, item, user } = useContext(Context)
   const [loading, setLoading] = useState(true)
   const [items, setItems] = useState([])
+  const getItemsAndSetToStore = async () => {
+    await getItems().then((data) => item.setLastAdditionItems(data.sort((a, b) => new Date(b.dateAddition) - new Date(a.dateAddition)).slice(0, 5)))
+  }
   const handleClickDeleteItem = async (id) => {
     await deleteItem(id)
     updateItemsCollection()
+    getItemsAndSetToStore()
   }
   const updateItemsCollection = async () => {
     setLoading(false)
@@ -25,6 +29,7 @@ const ListItems = observer((props) => {
         item.setFields(e)
       }
     })
+    getItemsAndSetToStore()
   }
   const getDeleteEditGroup = (e) => {
     return <ButtonGroup>

@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom"
 import { COLLECTION_ROUTE, OWN_PAGE_ROUTE, USER_ROUTE, MAIN_ROUTE } from "../utils/routes"
 import { observer } from 'mobx-react-lite'
 import { Context } from '../index'
-import { getCollectionsByUser, deleteCollection } from "../http/collectionApi"
+import { getCollectionsByUser, deleteCollection, getCollections } from "../http/collectionApi"
 import { getUsers, getUserByCollection } from '../http/userApi'
 
 const CardCollection = observer((props) => {
@@ -37,9 +37,17 @@ const CardCollection = observer((props) => {
       }
     }
   }
+  const getCollectionsAndSetToStore = async () => {
+    await getCollections().then((data) => {
+      collection.setBiggest(data.sort((a, b) => b.items.length - a.items.length).slice(0, 5))
+    })
+  }
   const handleClickDeleteCollection = async (id) => {
     collection.setIsLoad(false)
-    await deleteCollection(id).finally(() => collection.setIsLoad(true))
+    await deleteCollection(id).finally(() => {
+      collection.setIsLoad(true)
+      getCollectionsAndSetToStore()
+    })
   }
   const groupDeleteEdit = () => {
     return <ListGroup.Item className="d-flex justify-content-between">

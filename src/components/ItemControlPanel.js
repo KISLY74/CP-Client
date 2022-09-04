@@ -3,7 +3,7 @@ import { Form, Button, ButtonGroup } from "react-bootstrap"
 import { Context } from "../index"
 import { useContext, useEffect, useState } from "react"
 import { addAdditionalFields, getAdditionalFields } from "../http/collectionApi"
-import { createItem, editItem } from "../http/itemApi"
+import { createItem, editItem, getItems } from "../http/itemApi"
 
 const ItemControlPanel = observer(() => {
   const { collection, item } = useContext(Context)
@@ -38,9 +38,15 @@ const ItemControlPanel = observer(() => {
       }
     }
   }
+  const getItemsAndSetToStore = async () => {
+    await getItems().then((data) => item.setLastAdditionItems(data.sort((a, b) => new Date(b.dateAddition) - new Date(a.dateAddition)).slice(0, 5)))
+  }
   const handleClickCreateItem = async () => {
     item.setIsLoad(false)
-    await createItem(name, tags.split(','), collection.id, getAdditionalFieldsByForm()).finally(() => item.setIsLoad(true))
+    await createItem(name, tags.split(','), collection.id, getAdditionalFieldsByForm()).finally(() => {
+      item.setIsLoad(true)
+      getItemsAndSetToStore()
+    })
     setIsShow(false)
     clearFormCollection()
   }
@@ -53,6 +59,7 @@ const ItemControlPanel = observer(() => {
     await editItem(item.fields._id, name, tags.split(','), getAdditionalFieldsByForm()).finally(() => {
       item.setIsLoad(true)
       handleClickCancel()
+      getItemsAndSetToStore()
     })
   }
   const getAdditionalFieldsByForm = () => {
@@ -62,8 +69,11 @@ const ItemControlPanel = observer(() => {
         if (i === 2) {
           additionalFields[i][names[i][j].textContent] = fields[i][j].childNodes[0].checked
         } else {
-          if (fields[i][j].value === '') alert("Запоните пустые поля")
-          additionalFields[i][names[i][j].textContent] = fields[i][j].value
+          if (fields[i][j].value === '') {
+            alert("Запоните пустые поля")
+          } else {
+            additionalFields[i][names[i][j].textContent] = fields[i][j].value
+          }
         }
       }
     }

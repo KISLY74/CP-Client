@@ -1,4 +1,4 @@
-import { createCollection, editCollection } from "../http/collectionApi"
+import { createCollection, editCollection, getCollections } from "../http/collectionApi"
 import { useContext, useState, useEffect } from "react"
 import { observer } from "mobx-react-lite"
 import { Context } from "../index"
@@ -9,13 +9,20 @@ const CollectionControlPanel = observer((props) => {
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
   const [theme, setTheme] = useState('Книги')
+  const getCollectionsAndSetToStore = async () => {
+    await getCollections().then((data) => {
+      collection.setBiggest(data.sort((a, b) => b.items.length - a.items.length).slice(0, 5))
+    })
+  }
   const handleClickCreateCollection = async () => {
     collection.setIsLoad(false)
     !props.isOwn ? await createCollection(name, description, theme, JSON.parse(localStorage.getItem('viewUser')).email).finally(() => {
       collection.setIsLoad(true)
+      getCollectionsAndSetToStore()
       handleClickCancel()
     }) : await createCollection(name, description, theme, user.email).finally(() => {
       collection.setIsLoad(true)
+      getCollectionsAndSetToStore()
       handleClickCancel()
     })
   }
@@ -23,6 +30,7 @@ const CollectionControlPanel = observer((props) => {
     collection.setIsLoad(false)
     await editCollection(collection.fields.id, name, description, theme).finally(() => {
       collection.setIsLoad(true)
+      getCollectionsAndSetToStore()
       handleClickCancel()
     })
   }
