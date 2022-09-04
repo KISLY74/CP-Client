@@ -21,8 +21,8 @@ export const editCollection = async (id, name, description, theme) => {
 export const changeItemsInCollection = async (id, items) => {
   await axios.put(`${API_URL}/api/collection/change/items`, { id, items })
 }
-export const addAdditionalFields = async (id, stringsFields, numbersFields, booleansFields, datesFields) => {
-  await axios.put(`${API_URL}/api/collection/addFields`, { id, stringsFields, numbersFields, booleansFields, datesFields })
+export const addAdditionalFields = async (id, stringsFields, numbersFields, booleansFields, datesFields, textsFields) => {
+  await axios.put(`${API_URL}/api/collection/addFields`, { id, stringsFields, numbersFields, booleansFields, datesFields, textsFields })
 }
 export const getAdditionalFields = async (id) => {
   const res = await axios.post(`${API_URL}/api/collection/getFields`, { id })
