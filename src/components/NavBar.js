@@ -21,7 +21,7 @@ const NavBar = observer(() => {
     user.setUser(JSON.parse(localStorage.getItem('userStore')))
   }, [])
   return (
-    <Navbar collapseOnSelect expand="sm" bg="dark" variant="dark" className="d-flex justify-content-between fixed-top" style={{ paddingLeft: 15, paddingRight: 15 }
+    <Navbar collapseOnSelect expand="sm" bg="dark" variant="dark" className="d-flex justify-content-between" style={{ paddingLeft: 15, paddingRight: 15 }
     } bg="dark" variant="dark">
       <h4 className="text-white" id="username">
         {user.isAuth ? localStorage.getItem('username') : "Гость"}
