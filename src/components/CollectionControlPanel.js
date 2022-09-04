@@ -45,7 +45,7 @@ const CollectionControlPanel = observer((props) => {
       setTheme(collection.fields.theme)
     }
   }, [])
-  return <Form className="p-3 d-flex" style={{ minWidth: 450, rowGap: 14, flexDirection: "column" }}>
+  return <Form className="p-3 d-flex" style={{ maxWidth: 850, rowGap: 14, flexDirection: "column" }}>
     <h2>Страница управления коллекциями</h2>
     <h4>{collection.editMode ? "Редактирование коллекции" : "Создание коллекции"}</h4>
     <Form.Group>
