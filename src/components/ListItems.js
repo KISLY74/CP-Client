@@ -5,6 +5,7 @@ import { observer } from "mobx-react-lite"
 import { useContext, useEffect, useState } from "react"
 import { Context } from "../index"
 import { closeAccess, deleteItem, getItemsByCollection, openAccess, getItems } from "../http/itemApi"
+import { changeItemsInCollection } from "../http/collectionApi"
 
 const ListItems = observer((props) => {
   const { collection, item, user } = useContext(Context)
@@ -15,6 +16,7 @@ const ListItems = observer((props) => {
   }
   const handleClickDeleteItem = async (id) => {
     await deleteItem(id)
+    await changeItemsInCollection(collection.id)
     updateItemsCollection()
     getItemsAndSetToStore()
   }
