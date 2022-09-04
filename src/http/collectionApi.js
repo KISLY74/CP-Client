@@ -18,8 +18,8 @@ export const deleteCollection = async (id) => {
 export const editCollection = async (id, name, description, theme) => {
   await axios.put(`${API_URL}/api/collection/edit`, { id, name, description, theme })
 }
-export const changeItemsInCollection = async (id, items) => {
-  await axios.put(`${API_URL}/api/collection/change/items`, { id, items })
+export const changeItemsInCollection = async (id) => {
+  await axios.post(`${API_URL}/api/collection/change/items`, { id })
 }
 export const addAdditionalFields = async (id, stringsFields, numbersFields, booleansFields, datesFields, textsFields) => {
   await axios.put(`${API_URL}/api/collection/addFields`, { id, stringsFields, numbersFields, booleansFields, datesFields, textsFields })
