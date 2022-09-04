@@ -46,7 +46,7 @@ const ListCollection = observer((props) => {
     {collection.isLoad ?
       <div className="d-flex mt-4" style={{ columnGap: 20, flexWrap: "wrap" }}>
         {loading ? collections.map(e =>
-          <CardCollection isOwn={props.isOwn} collection={e} />) : <Spinner className="position-absolute top-50 start-50" animation="border" />}
+          <CardCollection isMain={false} isOwn={props.isOwn} collection={e} />) : <Spinner className="position-absolute top-50 start-50" animation="border" />}
       </div> : <Spinner className="position-absolute top-50 start-50" animation="border" />}
   </div>
 })
