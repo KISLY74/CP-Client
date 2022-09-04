@@ -17,7 +17,7 @@ const User = observer((props) => {
         <div>
           {collection.isLoad ?
             <div>
-              <CollectionControlPanel isOwn={true}/>
+              <CollectionControlPanel isOwn={true} />
               <ListCollection isOwn={true} />
             </div> : false}
         </div> : <div>
