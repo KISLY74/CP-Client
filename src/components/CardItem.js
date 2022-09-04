@@ -38,7 +38,7 @@ const CardItem = (props) => {
   }, [])
   return (<div>
     {loading ? <Card className="mb-4" style={{ minWidth: 300, maxWidth: 300 }}>
-      <Card.Body className="rounded-top" style={{ backgroundColor: '#222', maxHeight: 350 }}>
+      <Card.Body className="rounded-top" style={{ backgroundColor: '#222', maxHeight: 500 }}>
         {collections.map(collection => {
           if (collection.items.includes(props.item._id))
             return users.map(user => {
