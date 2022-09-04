@@ -4,21 +4,24 @@ import { observer } from "mobx-react-lite"
 import { Context } from "../index"
 import { Form, Button, ButtonGroup } from "react-bootstrap"
 
-const CollectionControlPanel = observer(() => {
+const CollectionControlPanel = observer((props) => {
   const { user, collection } = useContext(Context)
+  const [name, setName] = useState('')
+  const [description, setDescription] = useState('')
+  const [theme, setTheme] = useState('Книги')
   const handleClickCreateCollection = async () => {
     collection.setIsLoad(false)
-    localStorage.getItem('isView') ? await createCollection(collection.fields.name, collection.fields.description, collection.fields.theme, JSON.parse(localStorage.getItem('viewUser')).email).finally(() => {
+    !props.isOwn ? await createCollection(name, description, theme, JSON.parse(localStorage.getItem('viewUser')).email).finally(() => {
       collection.setIsLoad(true)
       handleClickCancel()
-    }) : await createCollection(collection.fields.name, collection.fields.description, collection.fields.theme, user.email).finally(() => {
+    }) : await createCollection(name, description, theme, user.email).finally(() => {
       collection.setIsLoad(true)
       handleClickCancel()
     })
   }
   const handleClickEditCollection = async () => {
     collection.setIsLoad(false)
-    await editCollection(collection.fields.id, collection.fields.name, collection.fields.description, collection.fields.theme).finally(() => {
+    await editCollection(collection.fields.id, name, description, theme).finally(() => {
       collection.setIsLoad(true)
       handleClickCancel()
     })
@@ -28,22 +31,26 @@ const CollectionControlPanel = observer(() => {
     collection.setEditMode(false)
   }
   useEffect(() => {
-    collection.setFields({ id: "", name: "", description: "", theme: "Книги" })
+    if (collection.editMode) {
+      setName(collection.fields.name)
+      setDescription(collection.fields.description)
+      setTheme(collection.fields.theme)
+    }
   }, [])
   return <Form className="p-3 d-flex" style={{ minWidth: 450, rowGap: 14, flexDirection: "column" }}>
     <h2>Страница управления коллекциями</h2>
     <h4>{collection.editMode ? "Редактирование коллекции" : "Создание коллекции"}</h4>
     <Form.Group>
       <Form.Label>Название коллекции</Form.Label>
-      <Form.Control type="text" value={collection.fields.name} onChange={(e) => collection.setFields({ id: collection.fields.id, name: e.target.value, description: collection.fields.description, theme: collection.fields.theme })} placeholder="Введите название коллекции" />
+      <Form.Control type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Введите название коллекции" />
     </Form.Group>
     <Form.Group>
       <Form.Label>Описание коллекции</Form.Label>
-      <Form.Control as="textarea" rows={3} value={collection.fields.description} onChange={(e) => collection.setFields({ id: collection.fields.id, name: collection.fields.name, description: e.target.value, theme: collection.fields.theme })} />
+      <Form.Control as="textarea" rows={3} value={description} onChange={(e) => setDescription(e.target.value)} />
     </Form.Group>
     <Form.Group >
       <Form.Label>Тема коллекции</Form.Label>
-      <Form.Select value={collection.fields.theme} onChange={(e) => collection.setFields({ id: collection.fields.id, name: collection.fields.name, description: collection.fields.description, theme: e.target.value })} >
+      <Form.Select value={theme} onChange={(e) => setTheme(e.target.value)} >
         <option>Книги</option>
         <option>Фильмы</option>
         <option>Автомобили</option>
