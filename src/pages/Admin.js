@@ -1,7 +1,7 @@
 import { Table, Form, ButtonGroup, Button, Spinner, ListGroup } from "react-bootstrap"
 import { useContext, useEffect, useState } from "react"
 import { getUsers, changeStatus, getOneUser, deleteUser, addUserToAdmins, removeUserFromAdmins } from "../http/userApi"
-import { LOGIN_ROUTE, USER_ROUTE } from "../utils/routes"
+import { LOGIN_ROUTE, USER_ROUTE, REGIN_ROUTE } from "../utils/routes"
 import { useNavigate, NavLink } from "react-router-dom"
 import { observer } from "mobx-react-lite"
 import { Context } from "../index"
@@ -13,7 +13,22 @@ const Admin = observer(() => {
   const [usersValues, setUsersValues] = useState([])
   const [headers, setHeaders] = useState([])
   const [loading, setLoading] = useState(true)
+  const checkStatus = async () => {
+    await getOneUser(user.email).then((res) => {
+      if (res.data.status === "Block") {
+        user.setIsAuth(false)
+        user.setIsBlock(true)
+        history(LOGIN_ROUTE)
+      } else if (res.data.status === "Delete") {
+        user.setIsAuth(false)
+        history(REGIN_ROUTE)
+      } else {
+        user.setIsAuth(true)
+      }
+    })
+  }
   const updateTableUsers = async () => {
+    checkStatus()
     setLoading(false)
     try {
       await getUsers().then((data) => {
@@ -26,10 +41,6 @@ const Admin = observer(() => {
     }
     return users
   }
-  useEffect(() => {
-    localStorage.setItem('isView', false)
-    updateTableUsers()
-  }, [])
   let checkboxes = []
   document.querySelectorAll(".checkbox").forEach(e => checkboxes.push(e.firstChild))
   const handleClickCheckboxAll = () => {
@@ -45,16 +56,6 @@ const Admin = observer(() => {
     } else {
       document.querySelector(".checkbox-all").firstChild.checked = false
     }
-  }
-  const checkStatus = async () => {
-    await getOneUser(user.email).then((data) => {
-      if (data.status === "Block") {
-        user.setIsAuth(false)
-        user.setIsBlock(true)
-      } else {
-        user.setIsAuth(true)
-      }
-    })
   }
   const handleClickDelete = async (email) => {
     await deleteUser(email).then(() => updateTableUsers())
@@ -97,6 +98,11 @@ const Admin = observer(() => {
       }
     })
   }
+  useEffect(() => {
+    localStorage.setItem('isView', false)
+    checkStatus()
+    updateTableUsers()
+  }, [])
   return (
     <div>
       {user.isAuth ?

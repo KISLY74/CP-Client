@@ -21,13 +21,16 @@ const Authorization = observer(() => {
       if (res.data.status === "Block") {
         user.setIsAuth(false)
         user.setIsBlock(true)
+        alert('Пользователь заблокирован')
+      } else if (res.data.status === "Delete") {
+        user.setIsAuth(false)
       } else {
         user.setIsAuth(true)
+        user.setUser(res.data)
+        localStorage.setItem('userStore', JSON.stringify(res.data))
+        localStorage.setItem("username", res.data.username)
+        res.data.roles.includes("ADMIN") ? history(ADMIN_ROUTE) : history(OWN_PAGE_ROUTE)
       }
-      user.setUser(res.data)
-      localStorage.setItem('userStore', JSON.stringify(res.data))
-      localStorage.setItem("username", res.data.username)
-      res.data.roles.includes("ADMIN") ? history(ADMIN_ROUTE) : history(OWN_PAGE_ROUTE)
     })
   }
   const handleClickReginLogin = async () => {
