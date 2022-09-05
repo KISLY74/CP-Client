@@ -11,7 +11,7 @@ import { observer } from "mobx-react-lite"
 import { Context } from ".."
 
 const CardItem = observer((props) => {
-  const { item } = useContext(Context)
+  const { item, user } = useContext(Context)
   const history = useNavigate()
   const [users, setUsers] = useState([])
   const [itemObj, setItemObj] = useState({})
@@ -65,7 +65,7 @@ const CardItem = observer((props) => {
                     <Badge bg="success">{collection.name}</Badge>
                   </Col>
                 </Row>
-                {localStorage.getItem('username') === "Гость" ? false : <Row className="mt-2">
+                {!user.isAuth ? false : <Row className="mt-2">
                   <Col className="d-flex align-items-center justify-content-between" style={{ flexWrap: "wrap" }}>
                     <ListComments itemId={props.item._id} />
                     <CommentForm itemId={props.item._id} />
