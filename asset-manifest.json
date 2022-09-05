@@ -1,11 +1,11 @@
 {
   "files": {
-    "main.js": "/CP-Client/static/js/main.a6042bba.js",
+    "main.js": "/CP-Client/static/js/main.5a4140ef.js",
     "static/media/comment.png": "/CP-Client/static/media/comment.0afec3295c8e1fc3c345.png",
     "index.html": "/CP-Client/index.html",
-    "main.a6042bba.js.map": "/CP-Client/static/js/main.a6042bba.js.map"
+    "main.5a4140ef.js.map": "/CP-Client/static/js/main.5a4140ef.js.map"
   },
   "entrypoints": [
-    "static/js/main.a6042bba.js"
+    "static/js/main.5a4140ef.js"
   ]
 }
