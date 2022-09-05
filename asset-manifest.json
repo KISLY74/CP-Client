@@ -1,0 +1,11 @@
+{
+  "files": {
+    "main.js": "/CP-Client/static/js/main.a6042bba.js",
+    "static/media/comment.png": "/CP-Client/static/media/comment.0afec3295c8e1fc3c345.png",
+    "index.html": "/CP-Client/index.html",
+    "main.a6042bba.js.map": "/CP-Client/static/js/main.a6042bba.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.a6042bba.js"
+  ]
+}
